@@ -6,7 +6,7 @@
 // Excluded for now: BETA tile and the bottom sections (services / stack /
 // contact) — not finalized yet.
 
-const { useEffect, useRef } = React;
+const { useEffect, useRef, useState } = React;
 const { ImgTile, CLIENTS, COPY } = window.WB;
 const { NCTile_Split } = window.NC;
 
@@ -106,8 +106,21 @@ const APPSTORE_BADGE = "assets/badges/appstore-white.svg";
 const GOOGLEPLAY_BADGE = "assets/badges/googleplay.png";
 
 /* ───── Radio Paradise — bespoke hero3 tile with three phones ────────────── */
+const RP_SHOTS = [
+  { id: 'rpShotRight',  fallback: 'assets/radio-paradise-screenshot-right.png',  alt: 'Radio Paradise — Lyrics' },
+  { id: 'rpShotCenter', fallback: 'assets/radio-paradise-screenshot-center.png', alt: 'Radio Paradise — Mixes home' },
+  { id: 'rpShotLeft',   fallback: 'assets/radio-paradise-screenshot-left.png',   alt: 'Radio Paradise — Now playing' },
+];
+
 function RadioParadiseTile() {
   const canvasRef = useRef(null);
+  // Carousel index — only matters on mobile (CSS hides the inactive phones
+  // below 700px). Defaults to 1, the desktop-center "Mixes home" shot.
+  const [activeShot, setActiveShot] = useState(1);
+  const last = RP_SHOTS.length - 1;
+  const prev = () => setActiveShot(i => (i === 0 ? last : i - 1));
+  const next = () => setActiveShot(i => (i === last ? 0 : i + 1));
+
   useEffect(() => {
     if (canvasRef.current && typeof window.mountCurrents === "function") {
       window.mountCurrents(canvasRef.current);
@@ -136,10 +149,26 @@ function RadioParadiseTile() {
             <ProjectChips client={RADIO_PARADISE} variant="inline" />
           </div>
         </div>
-        <div className="ssp-rp__shots">
-          <div className="ssp-rp-phone"><img src={_A('rpShotRight', 'assets/radio-paradise-screenshot-right.png')} alt="Radio Paradise — Lyrics" /></div>
-          <div className="ssp-rp-phone"><img src={_A('rpShotCenter', 'assets/radio-paradise-screenshot-center.png')} alt="Radio Paradise — Mixes home" /></div>
-          <div className="ssp-rp-phone"><img src={_A('rpShotLeft', 'assets/radio-paradise-screenshot-left.png')} alt="Radio Paradise — Now playing" /></div>
+        <div className="ssp-rp__shots" data-active-shot={activeShot}>
+          {RP_SHOTS.map(s => (
+            <div className="ssp-rp-phone" key={s.id}><img src={_A(s.id, s.fallback)} alt={s.alt} /></div>
+          ))}
+        </div>
+        <div className="ssp-rp__shots-nav" aria-label="Screenshot carousel">
+          <button className="ssp-rp__arrow" onClick={prev} aria-label="Previous screenshot">‹</button>
+          <div className="ssp-rp__dots" role="tablist">
+            {RP_SHOTS.map((s, i) => (
+              <button
+                key={s.id}
+                role="tab"
+                aria-selected={i === activeShot}
+                aria-label={s.alt}
+                className={i === activeShot ? 'is-on' : ''}
+                onClick={() => setActiveShot(i)}
+              />
+            ))}
+          </div>
+          <button className="ssp-rp__arrow" onClick={next} aria-label="Next screenshot">›</button>
         </div>
       </div>
     </div>

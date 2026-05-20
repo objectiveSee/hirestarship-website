@@ -453,6 +453,9 @@ html, body { margin: 0; padding: 0; background: var(--ssp-paper); color: var(--s
   z-index: 2;
 }
 
+/* Mobile-only carousel nav — hidden on desktop. */
+.ssp-rp__shots-nav { display: none; }
+
 /* ============================================================
    META STRIP — relies on .ws-projmeta in wireframe-styles.css.
    ============================================================ */
@@ -663,4 +666,112 @@ html, body { margin: 0; padding: 0; background: var(--ssp-paper); color: var(--s
   }
   .ssp-expertise__big { font-size: 40px; }
   .ssp-expertise__sub { font-size: 14px; max-width: none; }
+}
+
+/* ============================================================
+   MOBILE — Radio Paradise tile.
+   Drop 21:9 aspect, stack content vertically, fan-stack the
+   three phones below the text (center prominent, sides peeking).
+   ============================================================ */
+@media (max-width: 700px) {
+  .ssp-rp-tile { aspect-ratio: auto; }
+  .ssp-rp-tile__content {
+    display: flex;
+    flex-direction: column;
+  }
+  .ssp-rp__left {
+    max-width: none;
+    padding: 32px 24px 0;
+  }
+  .ssp-rp__sub { max-width: none; }
+
+  .ssp-rp__shots {
+    position: relative;
+    right: auto;
+    bottom: auto;
+    width: 100%;
+    margin: 28px 0 14px;
+    display: flex;
+    justify-content: center;
+  }
+  /* Mobile: show only the active phone; carousel arrows switch it. */
+  .ssp-rp__shots[data-active-shot="0"] .ssp-rp-phone:not(:nth-child(1)),
+  .ssp-rp__shots[data-active-shot="1"] .ssp-rp-phone:not(:nth-child(2)),
+  .ssp-rp__shots[data-active-shot="2"] .ssp-rp-phone:not(:nth-child(3)) {
+    display: none;
+  }
+  /* Force the same width on all three phones (override desktop's
+     per-nth-child widths) so heights stay equal between carousel
+     steps — otherwise aspect-ratio creates a height jump. */
+  .ssp-rp__shots .ssp-rp-phone,
+  .ssp-rp__shots .ssp-rp-phone:nth-child(1),
+  .ssp-rp__shots .ssp-rp-phone:nth-child(2),
+  .ssp-rp__shots .ssp-rp-phone:nth-child(3) {
+    width: 72%;
+    max-width: 300px;
+    transform: none;
+    z-index: 1;
+  }
+
+  /* Scale phone chrome down to match the smaller phones. */
+  .ssp-rp-phone {
+    border-radius: 28px;
+    padding: 4px;
+  }
+  .ssp-rp-phone > img { border-radius: 24px; }
+  .ssp-rp-phone::before {
+    top: 10px;
+    height: 18px;
+    width: 38%;
+  }
+
+  /* Carousel nav: arrows on either side of dots, paper-tinted. */
+  .ssp-rp__shots-nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    padding: 0 24px 32px;
+    color: var(--ssp-paper);
+  }
+  .ssp-rp__arrow {
+    appearance: none;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(246, 243, 236, 0.28);
+    color: var(--ssp-paper);
+    width: 36px;
+    height: 36px;
+    border-radius: 999px;
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    -webkit-backdrop-filter: blur(6px);
+            backdrop-filter: blur(6px);
+    transition: background 0.15s ease;
+  }
+  .ssp-rp__arrow:hover,
+  .ssp-rp__arrow:active { background: rgba(0, 0, 0, 0.5); }
+  .ssp-rp__dots {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .ssp-rp__dots button {
+    appearance: none;
+    background: rgba(246, 243, 236, 0.35);
+    border: none;
+    width: 7px;
+    height: 7px;
+    padding: 0;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background 0.15s ease, width 0.15s ease;
+  }
+  .ssp-rp__dots button.is-on {
+    background: var(--ssp-paper);
+    width: 20px;
+  }
 }
