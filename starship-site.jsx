@@ -34,13 +34,7 @@ function Hero() {
       <div className="ssp-hero__content">
         <nav className="ssp-nav">
           <div className="ssp-nav__brand">Starship Studios</div>
-          <div className="ssp-nav__links">
-            <span className="is-active">Work</span>
-            <span>About</span>
-            <span>Stack</span>
-            <span>Contact</span>
-          </div>
-          <div className="ssp-nav__cta">Say hi →</div>
+          <a className="ssp-nav__cta" href={`mailto:${COPY.contact}`}>Say hi →</a>
         </nav>
         <div className="ssp-hero__body">
           <div className="ssp-hero__kicker">A small studio · since 2005</div>
@@ -326,7 +320,7 @@ function StarshipSite() {
           <div className="ssp-postcard__right">
             <div>
               <span className="ssp-postcard__email-label">Write to</span>
-              <a className="ssp-postcard__email" href={`mailto:${COPY.contact}`}>hello@<br/>starshipstudios.example</a>
+              <a className="ssp-postcard__email" href={`mailto:${COPY.contact}`}>{COPY.contact}</a>
             </div>
             <a className="ssp-postcard__btn" href={`mailto:${COPY.contact}`}>Send a note</a>
           </div>

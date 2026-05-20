@@ -60,16 +60,6 @@ html, body { margin: 0; padding: 0; background: var(--ssp-paper); color: var(--s
   text-transform: uppercase;
   white-space: nowrap;
 }
-.ssp-nav__links {
-  display: flex; gap: 28px;
-  font-family: var(--ssp-mono);
-  font-size: 12px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  opacity: 0.9;
-}
-.ssp-nav__links span { cursor: pointer; padding-bottom: 3px; border-bottom: 1px solid transparent; }
-.ssp-nav__links .is-active { border-bottom-color: #ffd664; }
 .ssp-nav__cta {
   font-family: var(--ssp-mono);
   font-size: 12px;
@@ -79,6 +69,13 @@ html, body { margin: 0; padding: 0; background: var(--ssp-paper); color: var(--s
   padding: 7px 14px;
   border-radius: 999px;
   white-space: nowrap;
+  color: inherit;
+  text-decoration: none;
+  transition: background 160ms ease, border-color 160ms ease;
+}
+.ssp-nav__cta:hover {
+  background: rgba(246, 243, 236, 0.10);
+  border-color: rgba(246, 243, 236, 0.85);
 }
 
 .ssp-hero__body {
@@ -746,8 +743,6 @@ html, body { margin: 0; padding: 0; background: var(--ssp-paper); color: var(--s
     font-size: 12px;
     letter-spacing: 0.14em;
   }
-  /* Hide the desktop link row — mobile uses just brand + pill */
-  .ssp-nav__links { display: none; }
   .ssp-nav__cta {
     font-size: 10px;
     padding: 6px 12px;

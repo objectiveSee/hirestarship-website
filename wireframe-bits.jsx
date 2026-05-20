@@ -300,7 +300,7 @@ const COPY = {
     { k: "Web", v: "React, Next.js, TypeScript. Front-end first." },
     { k: "How we work", v: "Long engagements. We don't take many projects." }
   ],
-  contact: "hello@starshipstudios.example"
+  contact: "hello@hirestarship.com"
 };
 
 const CLIENTS = [
