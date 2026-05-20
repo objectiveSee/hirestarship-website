@@ -670,10 +670,14 @@ html, body { margin: 0; padding: 0; background: var(--ssp-paper); color: var(--s
 
 /* ============================================================
    MOBILE — Radio Paradise tile.
-   Drop 21:9 aspect, stack content vertically, fan-stack the
-   three phones below the text (center prominent, sides peeking).
+   Drop 21:9 aspect, stack content vertically, show one phone at
+   a time with carousel arrows.
+   Breakpoint is 900px (not 700px like other sections) because
+   the desktop layout reserves the left column at 46% width —
+   it needs ~1000px+ to fit the wordmark + tagline + side-by-side
+   store badges. Below 900px, vertical stack looks cleaner.
    ============================================================ */
-@media (max-width: 700px) {
+@media (max-width: 900px) {
   .ssp-rp-tile { aspect-ratio: auto; }
   .ssp-rp-tile__content {
     display: flex;
@@ -723,6 +727,21 @@ html, body { margin: 0; padding: 0; background: var(--ssp-paper); color: var(--s
     top: 10px;
     height: 18px;
     width: 38%;
+  }
+
+  /* Make the tech chips visually quieter on mobile — they're
+     a footnote, not a heavy block next to the marketing text. */
+  .ssp-rp__body .ssp-chips--inline {
+    margin-top: 12px;
+    gap: 5px;
+  }
+  .ssp-rp__body .ssp-chips--inline li,
+  .ssp-rp__body .ssp-chips--inline li.is-feat {
+    font-size: 11px;
+    padding: 4px 9px;
+    background: rgba(0, 0, 0, 0.22);
+    border-color: rgba(246, 243, 236, 0.18);
+    opacity: 0.85;
   }
 
   /* Carousel nav: arrows on either side of dots, paper-tinted. */
