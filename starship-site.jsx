@@ -175,6 +175,104 @@ function RadioParadiseTile() {
   );
 }
 
+/* ───── Live timecode clock (signature of the Timecode+ app) ─────────────
+   Counts up from page load at HH:MM:SS:FF where FF is frames at 24fps.
+   Mirrors the hook used on the real timecodeplus.com site. */
+const TC_FPS = 24;
+function useTimecode() {
+  const [parts, setParts] = useState({ h: "00", m: "00", s: "00", f: "00" });
+  useEffect(() => {
+    const start = performance.now();
+    let raf;
+    const tick = () => {
+      const ms = performance.now() - start;
+      const totalSeconds = Math.floor(ms / 1000);
+      setParts({
+        h: String(Math.floor(totalSeconds / 3600)).padStart(2, "0"),
+        m: String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, "0"),
+        s: String(totalSeconds % 60).padStart(2, "0"),
+        f: String(Math.floor((ms % 1000) / (1000 / TC_FPS))).padStart(2, "0"),
+      });
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, []);
+  return parts;
+}
+
+/* ───── Timecode+ — bespoke tile with live clock + screenshot carousel ──── */
+const TC_SHOTS = [
+  { id: "tcDictation",  fallback: "assets/timecode/dictation.png",  alt: "Timecode+ — live dictation while recording" },
+  { id: "tcMarkerList", fallback: "assets/timecode/marker-list.png", alt: "Timecode+ — marker list" },
+  { id: "tcExport",     fallback: "assets/timecode/export.png",      alt: "Timecode+ — export to NLEs" },
+  { id: "tcNewNote",    fallback: "assets/timecode/new-note.png",    alt: "Timecode+ — new note" },
+];
+
+function TimecodeTile() {
+  const tc = useTimecode();
+  const [activeShot, setActiveShot] = useState(0);
+  const last = TC_SHOTS.length - 1;
+  const prev = () => setActiveShot(i => (i === 0 ? last : i - 1));
+  const next = () => setActiveShot(i => (i === last ? 0 : i + 1));
+
+  return (
+    <div className="ssp-tc-tile" data-screen-label="Timecode+">
+      <div className="ssp-tc-tile__content">
+        <div className="ssp-tc__left">
+          <div className="ssp-tc__clock" aria-label={`Live timecode ${tc.h}:${tc.m}:${tc.s}:${tc.f}`}>
+            <span className="tc-seg tc-seg-1">{tc.h}</span>
+            <span className="tc-colon tc-seg-1">:</span>
+            <span className="tc-seg tc-seg-2">{tc.m}</span>
+            <span className="tc-colon tc-seg-2">:</span>
+            <span className="tc-seg tc-seg-3">{tc.s}</span>
+            <span className="tc-colon tc-seg-3">:</span>
+            <span className="tc-seg tc-seg-4 tc-frames">{tc.f}</span>
+          </div>
+          <div className="ssp-tc__head">
+            <img className="ssp-tc__icon" src={_A("tcAppIcon", "assets/timecode/app-icon.png")} alt="" />
+            <div className="ssp-tc__heading">
+              <div className="ssp-tc__kicker">iOS · Web</div>
+              <div className="ssp-tc__name">Timecode+</div>
+            </div>
+          </div>
+          <div className="ssp-tc__sub">Production logging for film and TV. Drop time-stamped markers as you shoot, then export straight to Final Cut, Resolve, or Premiere.</div>
+          <div className="ssp-tc__stores">
+            <a className="ssp-rp__badge" href="https://apps.apple.com/us/app/timecode-cameraman/id590534084" target="_blank" rel="noopener" aria-label="Download Timecode+ on the App Store">
+              <img src={APPSTORE_BADGE} alt="Download on the App Store" />
+            </a>
+          </div>
+          <ProjectChips client={TIMECODE} variant="inline" />
+        </div>
+
+        <div className="ssp-tc__right">
+          <div className="ssp-tc__shots" data-active-shot={activeShot}>
+            {TC_SHOTS.map(s => (
+              <div className="ssp-rp-phone" key={s.id}><img src={_A(s.id, s.fallback)} alt={s.alt} /></div>
+            ))}
+          </div>
+          <div className="ssp-tc__shots-nav" aria-label="Screenshot carousel">
+            <button className="ssp-rp__arrow" onClick={prev} aria-label="Previous screenshot">‹</button>
+            <div className="ssp-rp__dots" role="tablist">
+              {TC_SHOTS.map((s, i) => (
+                <button
+                  key={s.id}
+                  role="tab"
+                  aria-selected={i === activeShot}
+                  aria-label={s.alt}
+                  className={i === activeShot ? "is-on" : ""}
+                  onClick={() => setActiveShot(i)}
+                />
+              ))}
+            </div>
+            <button className="ssp-rp__arrow" onClick={next} aria-label="Next screenshot">›</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 /* ───── Project section wrapper ─────────────────────────────────────────── */
 const Project = ({ id, label, children }) => (
   <section className="ssp-project" id={id} data-screen-label={label}>
@@ -202,20 +300,9 @@ function StarshipSite() {
             <RadioParadiseTile />
           </Project>
 
-          {/* 2 · Timecode+ — chips overlay inside the tile bottom-left */}
+          {/* 2 · Timecode+ — bespoke tile with live clock + screenshot carousel */}
           <Project id="timecode" label="Timecode+">
-            <div className="ssp-tile">
-              <ImgTile
-                client={TIMECODE}
-                tone="dark"
-                aspect="16 / 9"
-                layout="card"
-                speed={22}
-                iconPosition="stacked"
-                nameSize={72}
-              />
-              <ProjectChips client={TIMECODE} variant="overlay" />
-            </div>
+            <TimecodeTile />
           </Project>
 
           {/* 3 · Namecheap Auctions — tile already shows its tech stack

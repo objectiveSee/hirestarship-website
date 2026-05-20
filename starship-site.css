@@ -285,6 +285,143 @@ html, body { margin: 0; padding: 0; background: var(--ssp-paper); color: var(--s
 }
 
 /* ============================================================
+   TIMECODE+ — bespoke tile with live clock + screenshot carousel.
+   Dark background, left content stack, right phone with carousel.
+   ============================================================ */
+.ssp-tc-tile {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 80% 50%, rgba(255, 107, 43, 0.10), transparent 55%),
+    linear-gradient(180deg, #15161a 0%, #0a0b0e 100%);
+  color: var(--ssp-paper);
+}
+.ssp-tc-tile__content {
+  position: relative;
+  height: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: stretch;
+}
+.ssp-tc__left {
+  padding: 48px 56px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 18px;
+  max-width: 620px;
+}
+.ssp-tc__head { display: flex; align-items: center; gap: 16px; }
+.ssp-tc__icon {
+  width: 56px; height: 56px;
+  border-radius: 13px;
+  display: block;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+}
+.ssp-tc__heading { display: flex; flex-direction: column; gap: 4px; }
+.ssp-tc__kicker {
+  font-family: var(--ssp-mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  opacity: 0.65;
+}
+.ssp-tc__name {
+  font-family: var(--ssp-sans);
+  font-weight: 800;
+  font-size: 48px;
+  letter-spacing: -0.025em;
+  line-height: 1;
+}
+.ssp-tc__sub {
+  font-size: 16px;
+  line-height: 1.5;
+  opacity: 0.85;
+  max-width: 480px;
+  margin: 0;
+}
+.ssp-tc__stores { display: flex; gap: 10px; margin-top: 4px; }
+
+/* Live timecode clock — signature element. Matches timecodeplus.com. */
+.ssp-tc__clock {
+  display: inline-flex;
+  align-self: flex-start;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: 12px;
+  padding: 10px 18px;
+  font-family: "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+  font-size: 22px;
+  font-weight: 500;
+  letter-spacing: 1.5px;
+  font-variant-numeric: tabular-nums;
+  color: rgba(255, 255, 255, 0.85);
+}
+.ssp-tc__clock .tc-seg,
+.ssp-tc__clock .tc-colon {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(8px);
+  animation: ssp-tc-boot 0.4s ease-out forwards;
+}
+.ssp-tc__clock .tc-seg-1 { animation-delay: 0.2s; }
+.ssp-tc__clock .tc-seg-2 { animation-delay: 0.35s; }
+.ssp-tc__clock .tc-seg-3 { animation-delay: 0.5s; }
+.ssp-tc__clock .tc-seg-4 { animation-delay: 0.65s; }
+.ssp-tc__clock .tc-colon { color: rgba(255, 255, 255, 0.35); margin: 0 1px; }
+.ssp-tc__clock .tc-frames {
+  color: #ff6b2b;
+  text-shadow: 0 0 12px rgba(255, 107, 43, 0.4);
+}
+@keyframes ssp-tc-boot {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Right side: single phone shown, prev/next switches it (just like RP mobile). */
+.ssp-tc__right {
+  position: relative;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 40px;
+  box-sizing: border-box;
+}
+.ssp-tc__shots {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  flex: 1;
+  min-height: 0;
+}
+.ssp-tc__shots .ssp-rp-phone {
+  width: auto;
+  height: 92%;
+  max-height: 480px;
+  aspect-ratio: 9 / 19.5;
+}
+.ssp-tc__shots[data-active-shot="0"] .ssp-rp-phone:not(:nth-child(1)),
+.ssp-tc__shots[data-active-shot="1"] .ssp-rp-phone:not(:nth-child(2)),
+.ssp-tc__shots[data-active-shot="2"] .ssp-rp-phone:not(:nth-child(3)),
+.ssp-tc__shots[data-active-shot="3"] .ssp-rp-phone:not(:nth-child(4)) {
+  display: none;
+}
+.ssp-tc__shots-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 16px;
+  color: var(--ssp-paper);
+}
+
+/* ============================================================
    RADIO PARADISE — bespoke "hero3" tile with three phones and
    Currents shader, taken from Radio Paradise Promo.html.
    ============================================================ */
@@ -753,44 +890,92 @@ html, body { margin: 0; padding: 0; background: var(--ssp-paper); color: var(--s
     padding: 0 24px 32px;
     color: var(--ssp-paper);
   }
-  .ssp-rp__arrow {
-    appearance: none;
-    background: rgba(0, 0, 0, 0.3);
-    border: 1px solid rgba(246, 243, 236, 0.28);
-    color: var(--ssp-paper);
-    width: 36px;
-    height: 36px;
-    border-radius: 999px;
-    font-size: 20px;
-    line-height: 1;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    -webkit-backdrop-filter: blur(6px);
-            backdrop-filter: blur(6px);
-    transition: background 0.15s ease;
+}
+
+/* ── Shared carousel-nav button styles (used by RP mobile + Timecode at all sizes) ── */
+.ssp-rp__arrow {
+  appearance: none;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(246, 243, 236, 0.28);
+  color: var(--ssp-paper);
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  -webkit-backdrop-filter: blur(6px);
+          backdrop-filter: blur(6px);
+  transition: background 0.15s ease;
+}
+.ssp-rp__arrow:hover,
+.ssp-rp__arrow:active { background: rgba(0, 0, 0, 0.5); }
+.ssp-rp__dots {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.ssp-rp__dots button {
+  appearance: none;
+  background: rgba(246, 243, 236, 0.35);
+  border: none;
+  width: 7px;
+  height: 7px;
+  padding: 0;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 0.15s ease, width 0.15s ease;
+}
+.ssp-rp__dots button.is-on {
+  background: var(--ssp-paper);
+  width: 20px;
+}
+
+/* ============================================================
+   MOBILE — Timecode tile. Stack vertically: text top, phone +
+   carousel below. Same breakpoint as RP (≤900px) since the
+   desktop two-column layout starts cramping below ~900px.
+   ============================================================ */
+@media (max-width: 900px) {
+  .ssp-tc-tile {
+    aspect-ratio: auto;
   }
-  .ssp-rp__arrow:hover,
-  .ssp-rp__arrow:active { background: rgba(0, 0, 0, 0.5); }
-  .ssp-rp__dots {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
+  .ssp-tc-tile__content {
+    grid-template-columns: 1fr;
   }
-  .ssp-rp__dots button {
-    appearance: none;
-    background: rgba(246, 243, 236, 0.35);
-    border: none;
-    width: 7px;
-    height: 7px;
-    padding: 0;
-    border-radius: 999px;
-    cursor: pointer;
-    transition: background 0.15s ease, width 0.15s ease;
+  .ssp-tc__left {
+    padding: 32px 24px 0;
+    max-width: none;
+    gap: 16px;
   }
-  .ssp-rp__dots button.is-on {
-    background: var(--ssp-paper);
-    width: 20px;
+  .ssp-tc__name { font-size: 40px; }
+  .ssp-tc__sub  { font-size: 14.5px; max-width: none; }
+  .ssp-tc__clock { font-size: 18px; padding: 8px 14px; letter-spacing: 1px; }
+
+  .ssp-tc__right {
+    padding: 24px 24px 28px;
+  }
+  .ssp-tc__shots .ssp-rp-phone {
+    height: auto;
+    width: 72%;
+    max-width: 300px;
+    max-height: none;
+  }
+
+  /* Quieter chips on mobile (footnote, not headline). */
+  .ssp-tc__left .ssp-chips--inline {
+    margin-top: 8px;
+    gap: 5px;
+  }
+  .ssp-tc__left .ssp-chips--inline li,
+  .ssp-tc__left .ssp-chips--inline li.is-feat {
+    font-size: 11px;
+    padding: 4px 9px;
+    background: rgba(0, 0, 0, 0.22);
+    border-color: rgba(246, 243, 236, 0.18);
+    opacity: 0.85;
   }
 }

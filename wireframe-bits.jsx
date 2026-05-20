@@ -312,16 +312,16 @@ const CLIENTS = [
     link: "https://timecodeplus.com",
     linkLabel: "timecodeplus.com ↗",
     appIcon: _A('tcAppIcon', 'assets/timecode/app-icon.png'),
-    heroImage: _A('tcMarkerList', 'assets/timecode/marker-list.png'),
-    altImage: _A('tcExport', 'assets/timecode/export.png'),
+    heroImage: _A('tcDictation', 'assets/timecode/dictation.png'),
+    altImage: _A('tcMarkerList', 'assets/timecode/marker-list.png'),
     // Multiple portrait screenshots — used by multi-shot / carousel modes.
-    // We have 2 real ones; the nulls below stand in for "one or two more
-    // screenshots you'll add" so the wireframe communicates the intent.
+    // Ordered for visual impact: vivid red dictation first, then the
+    // core marker-list, then export integrations, then new-note flow.
     heroImages: [
+      _A('tcDictation',  'assets/timecode/dictation.png'),
       _A('tcMarkerList', 'assets/timecode/marker-list.png'),
-      _A('tcExport', 'assets/timecode/export.png'),
-      null,
-      null
+      _A('tcExport',     'assets/timecode/export.png'),
+      _A('tcNewNote',    'assets/timecode/new-note.png'),
     ],
     tone: "dark",
     stack:    ["Swift", "SwiftUI", "Next.js", "TypeScript"],
