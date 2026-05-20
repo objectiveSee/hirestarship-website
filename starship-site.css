@@ -1,0 +1,630 @@
+/* Starship Studios — final rendered single-page site.
+   Pulls together selected wireframe components in a polished page layout.
+   Class prefix: ssp- (Starship Studios Page) */
+
+:root {
+  --ssp-paper: #f6f3ec;
+  --ssp-paper-deep: #e8e3d8;
+  --ssp-ink: #141414;
+  --ssp-ink-soft: #555;
+  --ssp-ink-faint: #9a948a;
+  --ssp-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+  --ssp-sans: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  --ssp-live: #ff4d4d;
+}
+
+html, body { margin: 0; padding: 0; background: var(--ssp-paper); color: var(--ssp-ink); font-family: var(--ssp-sans); }
+
+.ssp-page {
+  max-width: 1480px;
+  margin: 0 auto;
+  padding: 0;
+}
+
+/* ============================================================
+   HERO — full-bleed dark with starfield shader, floating nav,
+   big headline and CTAs. Same width as everything below it.
+   ============================================================ */
+.ssp-hero {
+  position: relative;
+  margin: 0 0 0;
+  aspect-ratio: 16 / 8.5;
+  background: #060912;
+  overflow: hidden;
+  color: var(--ssp-paper);
+}
+.ssp-hero__bg {
+  position: absolute; inset: 0;
+}
+.ssp-hero__bg canvas {
+  position: absolute; inset: 0; width: 100%; height: 100%; display: block;
+}
+.ssp-hero__content {
+  position: relative; z-index: 1;
+  height: 100%; box-sizing: border-box;
+  padding: 36px 56px 56px;
+  display: flex; flex-direction: column;
+  max-width: 1480px;
+  margin: 0 auto;
+}
+
+.ssp-nav {
+  display: flex; align-items: center; justify-content: space-between;
+  padding-bottom: 18px;
+  border-bottom: 1px solid rgba(246, 243, 236, 0.18);
+}
+.ssp-nav__brand {
+  font-family: var(--ssp-mono);
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.ssp-nav__links {
+  display: flex; gap: 28px;
+  font-family: var(--ssp-mono);
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  opacity: 0.9;
+}
+.ssp-nav__links span { cursor: pointer; padding-bottom: 3px; border-bottom: 1px solid transparent; }
+.ssp-nav__links .is-active { border-bottom-color: #ffd664; }
+.ssp-nav__cta {
+  font-family: var(--ssp-mono);
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  border: 1px solid rgba(246, 243, 236, 0.55);
+  padding: 7px 14px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.ssp-hero__body {
+  margin-top: auto;
+  max-width: 720px;
+}
+.ssp-hero__kicker {
+  font-family: var(--ssp-mono);
+  font-size: 13px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  opacity: 0.85;
+}
+.ssp-hero__title {
+  font-family: var(--ssp-sans);
+  font-weight: 800;
+  font-size: 96px;
+  line-height: 0.94;
+  letter-spacing: -0.025em;
+  margin: 18px 0 0;
+}
+.ssp-hero__intro {
+  margin-top: 22px;
+  font-size: 19px;
+  line-height: 1.4;
+  max-width: 540px;
+  opacity: 0.92;
+}
+.ssp-hero__ctas {
+  margin-top: 28px;
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+.ssp-hero__ctas .pri {
+  background: var(--ssp-paper);
+  color: var(--ssp-ink);
+  padding: 12px 22px;
+  border-radius: 999px;
+  font-family: var(--ssp-mono);
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.ssp-hero__ctas .sec {
+  font-family: var(--ssp-mono);
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding-bottom: 3px;
+  border-bottom: 1px solid var(--ssp-paper);
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+/* ============================================================
+   SECTION HEAD — final-style (Inter 800), replaces the
+   wireframe Caveat-based SectionHead component on this page.
+   ============================================================ */
+.ssp-secthead {
+  margin: 0 0 28px;
+  display: flex; flex-direction: column; gap: 8px;
+}
+.ssp-secthead__kicker {
+  font-family: var(--ssp-mono);
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ssp-ink-faint);
+}
+.ssp-secthead__title {
+  font-family: var(--ssp-sans);
+  font-weight: 800;
+  font-size: 52px;
+  letter-spacing: -0.025em;
+  line-height: 1;
+}
+
+/* ============================================================
+   EXPERTISE BAND — light tan section under the hero, three
+   columns of areas. Same as Hero Options · Option B.
+   ============================================================ */
+.ssp-expertise {
+  background: var(--ssp-paper);
+  color: var(--ssp-ink);
+  padding: 56px;
+  box-sizing: border-box;
+}
+.ssp-expertise__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  border-top: 1.4px solid var(--ssp-ink);
+  border-bottom: 1.4px solid var(--ssp-ink);
+}
+.ssp-expertise__col {
+  padding: 28px;
+  border-right: 1px solid rgba(20, 20, 20, 0.18);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.ssp-expertise__col:last-child { border-right: none; }
+.ssp-expertise__num {
+  font-family: var(--ssp-mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ssp-ink-faint);
+}
+.ssp-expertise__big {
+  font-family: var(--ssp-sans);
+  font-weight: 800;
+  font-size: 56px;
+  letter-spacing: -0.025em;
+  line-height: 1;
+}
+.ssp-expertise__sub {
+  font-size: 14.5px;
+  line-height: 1.45;
+  color: var(--ssp-ink-soft);
+  max-width: 340px;
+}
+
+/* ============================================================
+   PROJECTS — each tile sits flush against the next. Chips
+   that describe each project live INSIDE its tile.
+   ============================================================ */
+.ssp-projects {
+  display: flex; flex-direction: column;
+  gap: 0;
+}
+.ssp-project {
+  display: flex; flex-direction: column;
+  padding: 0;
+}
+
+/* Tile wrapper — lets us absolutely-position chip overlays inside. */
+.ssp-tile {
+  position: relative;
+  width: 100%;
+}
+
+/* When ImgTile is dropped in here, kill its rounded corners and the
+   inline CTA pill so our chip strip can sit cleanly in its place. */
+.ssp-tile .ws-imgtile {
+  width: 100%;
+  border-radius: 0;
+}
+.ssp-tile .ws-imgtile__cta { display: none; }
+
+/* Chip strip rendered INSIDE the dark tile overlay, bottom-left.
+   Single unified style — features and stack render identically. */
+.ssp-chips--overlay {
+  position: absolute;
+  left: 24px;
+  right: 24px;
+  bottom: 22px;
+  z-index: 5;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+.ssp-chips--overlay li,
+.ssp-chips--overlay li.is-feat {
+  font-family: var(--ssp-sans);
+  font-size: 12px;
+  padding: 6px 11px;
+  border-radius: 999px;
+  white-space: nowrap;
+  line-height: 1;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(246, 243, 236, 0.28);
+  color: var(--ssp-paper);
+  -webkit-backdrop-filter: blur(6px);
+          backdrop-filter: blur(6px);
+}
+
+/* Inline chip strip — used inside the bespoke Radio Paradise tile. */
+.ssp-chips--inline {
+  list-style: none;
+  margin: 14px 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+.ssp-chips--inline li,
+.ssp-chips--inline li.is-feat {
+  font-family: var(--ssp-sans);
+  font-size: 12px;
+  padding: 6px 11px;
+  border-radius: 999px;
+  white-space: nowrap;
+  line-height: 1;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(246, 243, 236, 0.28);
+  color: var(--ssp-paper);
+}
+
+/* ============================================================
+   RADIO PARADISE — bespoke "hero3" tile with three phones and
+   Currents shader, taken from Radio Paradise Promo.html.
+   ============================================================ */
+.ssp-rp-tile {
+  position: relative;
+  width: 100%;
+  background: transparent;
+  aspect-ratio: 21 / 9;
+  overflow: hidden;
+}
+.ssp-rp-tile__shader {
+  position: absolute; inset: 0;
+  border-radius: 0;
+  overflow: hidden;
+  background: #0a0d14;
+}
+.ssp-rp-tile__shader canvas {
+  position: absolute; inset: 0; width: 100%; height: 100%; display: block;
+}
+.ssp-rp-tile__content {
+  position: relative; z-index: 1;
+  height: 100%;
+  color: var(--ssp-paper);
+}
+.ssp-rp__left {
+  padding: 40px 48px;
+  display: flex; flex-direction: column;
+  height: 100%;
+  max-width: 46%;
+  box-sizing: border-box;
+  justify-content: flex-start;
+}
+.ssp-rp__live {
+  display: inline-flex; align-items: center; gap: 9px;
+  align-self: flex-start;
+  margin-bottom: 28px;
+  white-space: nowrap;
+  font-family: var(--ssp-mono);
+  font-size: 11px;
+  letter-spacing: 0.20em;
+  text-transform: uppercase;
+  background: rgba(0, 0, 0, 0.28);
+  border: 1px solid rgba(246, 243, 236, 0.16);
+  padding: 8px 14px;
+  border-radius: 999px;
+}
+.ssp-rp__live::before {
+  content: "";
+  width: 8px; height: 8px; border-radius: 999px;
+  background: var(--ssp-live);
+  box-shadow: 0 0 0 0 rgba(255, 77, 77, 0.55);
+  animation: ssp-pulse 2.2s infinite;
+}
+@keyframes ssp-pulse {
+  0%   { box-shadow: 0 0 0 0 rgba(255, 77, 77, 0.55); }
+  70%  { box-shadow: 0 0 0 10px rgba(255, 77, 77, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 77, 77, 0); }
+}
+
+.ssp-rp__body { margin-top: 0; }
+.ssp-rp__wordmark {
+  display: block;
+  width: 100%;
+  max-width: 280px;
+  height: 74px;
+  object-fit: cover;
+  object-position: center 56%;
+}
+.ssp-rp__sub {
+  font-size: 15px;
+  opacity: 0.85;
+  margin-top: 16px;
+  line-height: 1.4;
+  max-width: 400px;
+  color: var(--ssp-paper);
+}
+.ssp-rp__stores {
+  display: flex;
+  gap: 10px;
+  align-items: stretch;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+.ssp-rp__badge {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  height: 48px;
+  text-decoration: none;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+.ssp-rp__badge img {
+  height: 100%;
+  width: auto;
+  display: block;
+}
+.ssp-rp__badge:hover { transform: translateY(-1px); }
+.ssp-rp__badge--soon { opacity: 0.55; cursor: default; }
+.ssp-rp__badge--soon:hover { transform: none; }
+.ssp-rp__badge-tag {
+  position: absolute;
+  top: -8px; right: -8px;
+  background: var(--ssp-paper);
+  color: var(--ssp-ink);
+  font-family: var(--ssp-mono);
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  padding: 3px 7px;
+  border-radius: 999px;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.ssp-rp__shots {
+  position: absolute;
+  right: 3%;
+  bottom: -28%;
+  width: 60%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  pointer-events: none;
+}
+.ssp-rp__shots .ssp-rp-phone { pointer-events: auto; }
+.ssp-rp__shots .ssp-rp-phone:nth-child(1) {
+  width: 30%;
+  transform: translate(36%, -14%) rotate(-4deg);
+  z-index: 1;
+}
+.ssp-rp__shots .ssp-rp-phone:nth-child(2) {
+  width: 38%;
+  transform: translateY(6%);
+  z-index: 3;
+}
+.ssp-rp__shots .ssp-rp-phone:nth-child(3) {
+  width: 30%;
+  transform: translate(-36%, -14%) rotate(4deg);
+  z-index: 1;
+}
+.ssp-rp-phone {
+  aspect-ratio: 9 / 19.5;
+  border-radius: 40px;
+  padding: 6px;
+  background: linear-gradient(180deg, #2a2f3d 0%, #14171f 100%);
+  box-shadow:
+    0 36px 90px rgba(0, 0, 0, 0.55),
+    0 12px 30px rgba(0, 0, 0, 0.30),
+    0 0 0 1px rgba(255, 255, 255, 0.10) inset;
+  position: relative;
+}
+.ssp-rp-phone > img {
+  display: block;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  border-radius: 34px;
+}
+.ssp-rp-phone::before {
+  content: "";
+  position: absolute;
+  top: 14px; left: 50%;
+  transform: translateX(-50%);
+  width: 32%; height: 24px;
+  background: #0a0d14;
+  border-radius: 0 0 14px 14px;
+  z-index: 2;
+}
+
+/* ============================================================
+   META STRIP — relies on .ws-projmeta in wireframe-styles.css.
+   ============================================================ */
+.ws-projmeta { margin-top: 18px; }
+
+/* ============================================================
+   FOOTER — Postcard CTA. A card-on-tan composition: tan field
+   wraps a paper card that's split between the message (left) and
+   the address/CTA (right). Sign-off underneath the card.
+   ============================================================ */
+.ssp-footer {
+  margin: 0;
+  background: var(--ssp-paper-deep);
+  padding: 88px 56px;
+  border-top: 1.4px solid var(--ssp-ink);
+}
+.ssp-postcard {
+  max-width: 1180px;
+  margin: 0 auto;
+  background: var(--ssp-paper);
+  border: 1.4px solid var(--ssp-ink);
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  align-items: stretch;
+}
+.ssp-postcard__left {
+  padding: 48px 48px 44px;
+  display: flex; flex-direction: column; gap: 18px;
+}
+.ssp-postcard__stamp {
+  align-self: flex-start;
+  font-family: var(--ssp-mono); font-size: 11px;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--ssp-ink);
+  border: 1.4px solid var(--ssp-ink);
+  padding: 6px 12px;
+  border-radius: 999px;
+}
+.ssp-postcard__title {
+  font-family: var(--ssp-sans);
+  font-weight: 800;
+  font-size: 62px;
+  line-height: 0.96;
+  letter-spacing: -0.025em;
+  margin: 0;
+}
+.ssp-postcard__title em {
+  font-style: italic;
+  font-weight: 800;
+  color: var(--ssp-ink-soft);
+}
+.ssp-postcard__sub {
+  margin: 0;
+  color: var(--ssp-ink-soft);
+  font-size: 16px;
+  line-height: 1.5;
+  max-width: 440px;
+}
+.ssp-postcard__right {
+  border-left: 1px solid rgba(20, 20, 20, 0.18);
+  padding: 48px;
+  display: flex; flex-direction: column; gap: 22px; justify-content: space-between;
+}
+.ssp-postcard__email-label {
+  font-family: var(--ssp-mono); font-size: 11px;
+  letter-spacing: 0.20em; text-transform: uppercase;
+  color: var(--ssp-ink-faint);
+}
+.ssp-postcard__email {
+  display: block;
+  margin-top: 6px;
+  font-family: var(--ssp-sans);
+  font-weight: 700;
+  font-size: 28px;
+  letter-spacing: -0.015em;
+  text-decoration: none;
+  color: var(--ssp-ink);
+  word-break: break-word;
+}
+.ssp-postcard__btn {
+  display: inline-flex;
+  align-items: center; gap: 12px;
+  background: var(--ssp-ink);
+  color: var(--ssp-paper);
+  text-decoration: none;
+  padding: 14px 22px;
+  border-radius: 999px;
+  font-family: var(--ssp-mono);
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  align-self: flex-start;
+}
+.ssp-postcard__btn::after { content: "\2192"; font-size: 14px; }
+.ssp-postcard__base {
+  margin: 32px auto 0;
+  max-width: 1180px;
+  display: flex; justify-content: space-between; gap: 24px; flex-wrap: wrap;
+  color: var(--ssp-ink-faint);
+  font-size: 12px;
+  font-family: var(--ssp-mono);
+  letter-spacing: 0.10em;
+}
+.ssp-postcard__base b { color: var(--ssp-ink); font-weight: 600; }
+
+/* ============================================================
+   Final tweak: kill the leftover wireframe meta strip if it
+   sneaks in, and make sure the hero/tiles don't pick up any
+   rounded corners from outside.
+   ============================================================ */
+.ssp-page .ws-imgtile { border-radius: 0; }
+.ssp-page .nc-tile { border-radius: 0; }
+
+/* ============================================================
+   MOBILE — Hero (matches M6 · Image-led from mobile-variations).
+   Triggers ≤700px. Other sections still need their own mobile
+   passes; this block scopes only to .ssp-hero.
+   ============================================================ */
+@media (max-width: 700px) {
+  .ssp-hero {
+    aspect-ratio: auto;
+    min-height: 560px;
+  }
+  .ssp-hero__content {
+    padding: 18px 18px 28px;
+  }
+  .ssp-nav {
+    padding-bottom: 14px;
+  }
+  .ssp-nav__brand {
+    font-size: 12px;
+    letter-spacing: 0.14em;
+  }
+  /* Hide the desktop link row — mobile uses just brand + pill */
+  .ssp-nav__links { display: none; }
+  .ssp-nav__cta {
+    font-size: 10px;
+    padding: 6px 12px;
+    letter-spacing: 0.14em;
+  }
+
+  .ssp-hero__body {
+    margin-top: auto;
+    padding-top: 80px;
+    max-width: none;
+  }
+  .ssp-hero__kicker {
+    font-size: 10px;
+    letter-spacing: 0.18em;
+  }
+  .ssp-hero__title {
+    font-size: 44px;
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    margin-top: 10px;
+  }
+  .ssp-hero__intro {
+    font-size: 14px;
+    line-height: 1.35;
+    margin-top: 14px;
+    max-width: none;
+  }
+  .ssp-hero__ctas {
+    margin-top: 20px;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+  .ssp-hero__ctas .pri {
+    padding: 10px 18px;
+    font-size: 11px;
+  }
+  /* Secondary "say hi" inline CTA is redundant on mobile —
+     the nav already has the Say hi pill. Hide it. */
+  .ssp-hero__ctas .sec { display: none; }
+}

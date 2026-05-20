@@ -1,0 +1,850 @@
+/* Wireframe aesthetic — sketchy but legible. Paper-like, low-fi.
+   All sizes scale through --u (density unit) and --ink/--paper/--accent (theme). */
+
+:root {
+  --u: 6px;             /* density unit */
+  --paper: #f6f3ec;     /* off-white paper */
+  --paper-2: #efeae0;
+  --ink: #1a1a1a;
+  --ink-soft: #555;
+  --ink-faint: #9a948a;
+  --accent: #2d5fff;    /* subtle space-blue */
+  --hand: "Caveat", "Kalam", "Patrick Hand", cursive;
+  --mono: "JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace;
+  --sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+[data-theme="paper"] { --paper:#f6f3ec; --paper-2:#efeae0; --ink:#1a1a1a; --ink-soft:#555; --ink-faint:#9a948a; --accent:#2d5fff; }
+[data-theme="blueprint"] { --paper:#0c2440; --paper-2:#10325a; --ink:#e7f0ff; --ink-soft:#9fbbe6; --ink-faint:#557aa8; --accent:#ffd664; }
+[data-theme="graphite"] { --paper:#1c1c1c; --paper-2:#242424; --ink:#ebe7df; --ink-soft:#a8a297; --ink-faint:#5e5a52; --accent:#ff7a45; }
+[data-theme="mono"] { --paper:#fafafa; --paper-2:#f0f0f0; --ink:#111; --ink-soft:#555; --ink-faint:#aaa; --accent:#111; }
+
+.ws-board {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--hand);
+  width: 100%;
+  height: 100%;
+  padding: calc(var(--u) * 7);
+  position: relative;
+  overflow: hidden;
+}
+
+/* faint paper grain */
+.ws-board::before {
+  content: "";
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(circle at 20% 30%, rgba(0,0,0,0.03), transparent 60%),
+    radial-gradient(circle at 80% 70%, rgba(0,0,0,0.025), transparent 50%);
+  pointer-events: none;
+}
+
+[data-theme="blueprint"] .ws-board::before {
+  background:
+    repeating-linear-gradient(0deg, transparent 0, transparent 23px, rgba(255,255,255,0.04) 23px, rgba(255,255,255,0.04) 24px),
+    repeating-linear-gradient(90deg, transparent 0, transparent 23px, rgba(255,255,255,0.04) 23px, rgba(255,255,255,0.04) 24px);
+}
+
+/* Typography */
+.ws-h { font-family: var(--hand); margin: 0; line-height: 1; letter-spacing: -0.01em; font-weight: 500; }
+.ws-h--1 { font-size: calc(var(--u) * 9); }
+.ws-h--2 { font-size: calc(var(--u) * 6); }
+.ws-h--3 { font-size: calc(var(--u) * 4.2); }
+.ws-h--4 { font-size: calc(var(--u) * 3); }
+
+.ws-note { font-family: var(--mono); font-size: calc(var(--u) * 1.7); color: var(--ink-faint); letter-spacing: 0.02em; text-transform: uppercase; }
+.ws-kicker { font-family: var(--mono); font-size: calc(var(--u) * 1.6); color: var(--ink-soft); letter-spacing: 0.16em; text-transform: uppercase; }
+.ws-body { font-family: var(--hand); font-size: calc(var(--u) * 3); color: var(--ink-soft); line-height: 1.15; }
+
+/* Boxes */
+.ws-box {
+  border: 1.2px solid var(--ink);
+  border-radius: 4px;
+  position: relative;
+  padding: calc(var(--u) * 1.5);
+}
+.ws-box--dashed { border-style: dashed; border-color: var(--ink-soft); }
+.ws-box--fill { background: var(--paper-2); }
+.ws-box__label {
+  position: absolute; top: -8px; left: 10px;
+  background: var(--paper); padding: 0 6px;
+  font-family: var(--mono); font-size: calc(var(--u) * 1.5);
+  color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.1em;
+}
+
+/* Scribble lines (placeholder body text) */
+.ws-scribble__line {
+  height: calc(var(--u) * 1.1);
+  background: var(--ink-soft);
+  opacity: 0.55;
+  border-radius: 999px;
+}
+[data-rough="rough"] .ws-scribble__line {
+  height: calc(var(--u) * 1.4);
+  background: repeating-linear-gradient(90deg, var(--ink-soft) 0 6px, transparent 6px 8px);
+  opacity: 0.7;
+}
+
+.ws-handline { height: 6px; color: var(--ink); display: block; }
+
+/* Tag / chip */
+.ws-tag {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: calc(var(--u) * 1.6);
+  border: 1px solid var(--ink);
+  padding: 3px 8px;
+  border-radius: 999px;
+  letter-spacing: 0.05em;
+}
+
+.ws-techchip {
+  font-family: var(--mono);
+  font-size: calc(var(--u) * 1.7);
+  color: var(--ink);
+  border-bottom: 1px dashed var(--ink-soft);
+  padding-bottom: 2px;
+}
+
+/* MetaStrip — stack + features chip row beneath each project tile.
+   Mirrors the .meta block on Radio Paradise Promo.html so portfolio
+   metadata reads consistently across the site. */
+.ws-projmeta {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(20, 20, 20, 0.12);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 56px;
+}
+.ws-projmeta__col { display: flex; flex-direction: column; gap: 12px; }
+.ws-projmeta__label {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.20em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+.ws-projmeta__chips {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.ws-projmeta__chips li {
+  font-family: var(--sans);
+  font-size: 13px;
+  color: var(--ink);
+  padding: 7px 14px;
+  border: 1px solid rgba(20, 20, 20, 0.16);
+  border-radius: 999px;
+  white-space: nowrap;
+  line-height: 1;
+}
+.ws-projmeta__chips li.is-feat {
+  background: var(--ink);
+  color: var(--paper);
+  border-color: var(--ink);
+}
+
+/* Phone mockup */
+.ws-phone {
+  position: relative;
+  border: 1.6px solid var(--ink);
+  border-radius: 22px;
+  background: var(--paper);
+  padding: 10px 6px 12px;
+  display: flex; flex-direction: column; align-items: stretch;
+  box-shadow: 4px 5px 0 rgba(0,0,0,0.08);
+}
+.ws-phone__notch {
+  width: 36%; height: 8px;
+  background: var(--ink); border-radius: 0 0 6px 6px;
+  margin: -10px auto 6px;
+}
+.ws-phone__home {
+  width: 30%; height: 3px;
+  background: var(--ink); border-radius: 4px;
+  margin: 6px auto 0;
+}
+.ws-phone__screen {
+  flex: 1;
+  background: var(--paper-2);
+  border: 1px dashed var(--ink-soft);
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+}
+
+/* App-specific screens */
+.ws-screen { position: absolute; inset: 0; padding: 8px; display: flex; flex-direction: column; gap: 6px; }
+.ws-screen__bar { height: 4px; width: 30%; background: var(--ink-soft); border-radius: 2px; opacity: 0.6; }
+.ws-screen__hero { flex: 0 0 38%; background: var(--ink); opacity: 0.85; border-radius: 4px; }
+.ws-screen__rowset { display: flex; flex-direction: column; gap: 5px; flex: 1; }
+.ws-screen__row { height: 10px; background: var(--ink-soft); opacity: 0.4; border-radius: 2px; }
+.ws-screen__row:nth-child(2) { width: 80%; }
+.ws-screen__row:nth-child(3) { width: 92%; }
+.ws-screen__row:nth-child(4) { width: 70%; }
+.ws-screen__tabs { height: 14px; background: var(--paper); border-top: 1px solid var(--ink-soft); margin: 0 -8px -8px; }
+
+.ws-screen__search { height: 14px; border: 1px solid var(--ink-soft); border-radius: 3px; opacity: 0.7; }
+.ws-screen__list { display: flex; flex-direction: column; gap: 4px; flex: 1; }
+.ws-screen__listitem { display: flex; gap: 6px; align-items: center; }
+.ws-screen__chip { flex: 1; height: 8px; background: var(--ink-soft); opacity: 0.45; border-radius: 2px; }
+.ws-screen__chip--narrow { flex: 0 0 30%; }
+
+.ws-screen__timecode { font-family: var(--mono); font-size: 11px; color: var(--ink); text-align: center; letter-spacing: 1px; }
+.ws-screen__waveform { flex: 1; display: flex; align-items: center; justify-content: space-between; gap: 1px; }
+.ws-screen__waveform span { flex: 1; background: var(--ink); opacity: 0.85; border-radius: 1px; }
+.ws-screen__controls { display: flex; justify-content: space-around; padding-top: 4px; }
+.ws-screen__controls span { width: 14px; height: 14px; border: 1px solid var(--ink); border-radius: 50%; }
+.ws-screen__controls span:nth-child(2) { background: var(--ink); }
+
+.ws-screen__art { flex: 0 0 45%; background: var(--ink); opacity: 0.9; border-radius: 4px; }
+.ws-screen__track { height: 8px; background: var(--ink-soft); opacity: 0.7; border-radius: 2px; width: 70%; }
+.ws-screen__sub { height: 6px; background: var(--ink-soft); opacity: 0.4; border-radius: 2px; width: 45%; }
+.ws-screen__player { display: flex; justify-content: center; gap: 14px; align-items: center; margin-top: auto; padding-bottom: 4px; }
+.ws-screen__player span { width: 12px; height: 12px; border: 1px solid var(--ink); border-radius: 2px; }
+.ws-screen__play { background: var(--ink); border-radius: 50% !important; width: 18px !important; height: 18px !important; }
+
+/* Callouts */
+.ws-callout {
+  display: flex; align-items: center; gap: 6px;
+  color: var(--accent);
+  font-family: var(--hand);
+  font-size: calc(var(--u) * 2.5);
+}
+.ws-callout__arrow { width: 50px; height: 18px; flex: 0 0 auto; }
+.ws-callout--left .ws-callout__arrow { transform: scaleX(-1); order: 2; }
+
+/* Constellation */
+.ws-constellation { color: var(--accent); }
+
+/* Inputs */
+.ws-input { display: flex; flex-direction: column; gap: 6px; }
+.ws-input__label { font-family: var(--mono); font-size: calc(var(--u) * 1.6); color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.1em; }
+.ws-input__field {
+  height: 28px;
+  border-bottom: 1.2px solid var(--ink);
+  position: relative;
+  font-family: var(--hand);
+  font-size: calc(var(--u) * 2.6);
+  color: var(--ink-faint);
+}
+.ws-input__field--area { border: 1.2px dashed var(--ink-soft); border-radius: 4px; padding: 6px; }
+.ws-input__field::before { content: attr(data-placeholder); color: var(--ink-faint); }
+
+/* Section head */
+.ws-secthead { display: flex; gap: calc(var(--u) * 2); align-items: baseline; }
+.ws-secthead__num {
+  font-family: var(--mono); font-size: calc(var(--u) * 2.2);
+  color: var(--accent); letter-spacing: 0.1em;
+}
+.ws-secthead__kicker { font-family: var(--mono); font-size: calc(var(--u) * 1.6); color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.16em; }
+.ws-secthead__title { font-family: var(--hand); font-size: calc(var(--u) * 5); line-height: 1; margin-top: 4px; }
+
+/* Generic layout helpers */
+.ws-row { display: flex; gap: calc(var(--u) * 3); align-items: flex-start; }
+.ws-col { display: flex; flex-direction: column; gap: calc(var(--u) * 3); }
+.ws-divider { height: 1.2px; background: var(--ink); width: 100%; margin: calc(var(--u) * 2) 0; opacity: 0.85; }
+.ws-divider--dashed { background: none; border-top: 1.2px dashed var(--ink-soft); height: 0; }
+
+/* Client row variants */
+.ws-clientrow {
+  display: grid;
+  gap: calc(var(--u) * 3);
+  padding: calc(var(--u) * 3) 0;
+  border-bottom: 1.2px solid var(--ink);
+  align-items: center;
+}
+.ws-clientrow:last-child { border-bottom: none; }
+.ws-clientrow__name { font-family: var(--hand); font-size: calc(var(--u) * 5.5); line-height: 1; }
+.ws-clientrow__role { font-family: var(--mono); font-size: calc(var(--u) * 1.6); color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.14em; margin-top: 6px; }
+.ws-clientrow__desc { font-family: var(--hand); font-size: calc(var(--u) * 2.7); color: var(--ink-soft); line-height: 1.2; }
+
+/* Hero variations */
+.ws-hero {
+  position: relative;
+  padding-bottom: calc(var(--u) * 5);
+  border-bottom: 1.4px solid var(--ink);
+  margin-bottom: calc(var(--u) * 5);
+}
+
+.ws-meta { font-family: var(--mono); font-size: calc(var(--u) * 1.5); color: var(--ink-faint); text-transform: uppercase; letter-spacing: 0.16em; }
+
+/* Top bar (every variation has a thin one) */
+.ws-topbar {
+  display: flex; justify-content: space-between; align-items: center;
+  font-family: var(--mono); font-size: calc(var(--u) * 1.7);
+  padding-bottom: calc(var(--u) * 2);
+  border-bottom: 1px solid var(--ink);
+  margin-bottom: calc(var(--u) * 5);
+  color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.16em;
+}
+.ws-topbar__brand { color: var(--ink); font-family: var(--hand); font-size: calc(var(--u) * 3); text-transform: none; letter-spacing: 0; }
+.ws-topbar nav { display: flex; gap: calc(var(--u) * 3); }
+
+/* Footer line */
+.ws-footer {
+  border-top: 1.2px solid var(--ink);
+  margin-top: calc(var(--u) * 4);
+  padding-top: calc(var(--u) * 2);
+  display: flex; justify-content: space-between;
+  font-family: var(--mono); font-size: calc(var(--u) * 1.6);
+  color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.16em;
+}
+
+/* Stars (subtle space motif) */
+.ws-star { color: var(--accent); }
+
+/* Anchor-nav top bar — single-page site links with active state */
+.ws-nav {
+  display: flex; justify-content: space-between; align-items: center;
+  padding-bottom: calc(var(--u) * 2);
+  border-bottom: 1px solid var(--ink);
+  margin-bottom: calc(var(--u) * 6);
+}
+.ws-nav__brand {
+  font-family: var(--hand); font-size: calc(var(--u) * 3.6);
+  display: flex; align-items: center; gap: 8px;
+}
+.ws-nav__links {
+  display: flex; align-items: center; gap: calc(var(--u) * 4);
+  font-family: var(--mono); font-size: calc(var(--u) * 1.7);
+  color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.14em;
+}
+.ws-nav__links a, .ws-nav__links span {
+  cursor: pointer;
+  padding: 4px 0;
+  border-bottom: 1.4px solid transparent;
+  color: inherit; text-decoration: none;
+}
+.ws-nav__links .is-active {
+  color: var(--ink);
+  border-bottom-color: var(--accent);
+}
+.ws-nav__cta {
+  font-family: var(--mono); font-size: calc(var(--u) * 1.7);
+  letter-spacing: 0.14em;
+  border: 1.4px solid var(--ink); padding: 8px 14px; border-radius: 999px;
+  color: var(--ink); text-transform: uppercase;
+}
+
+/* Device frame — real iPhone bezel over a screenshot */
+.ws-device {
+  position: relative;
+  display: inline-block;
+  vertical-align: top;
+}
+.ws-device__screen {
+  position: absolute;
+  overflow: hidden;
+  background: #000;
+}
+.ws-device__screen img {
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: top center;
+  display: block;
+}
+.ws-device__screen--empty::after {
+  content: attr(data-placeholder);
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono); font-size: 11px;
+  color: rgba(255,255,255,0.45); letter-spacing: 0.14em; text-transform: uppercase;
+  text-align: center; padding: 12px;
+  background:
+    repeating-linear-gradient(45deg, transparent 0 12px, rgba(255,255,255,0.04) 12px 13px);
+}
+.ws-device__frame {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Image tile (Nike-style) — tinted backdrop with a phone product-shot inside */
+.ws-imgtile {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  border-radius: 4px;
+  overflow: hidden;
+  display: flex; flex-direction: column;
+  border: 1.4px solid var(--ink);
+}
+.ws-imgtile--tall { aspect-ratio: 4 / 5; }
+.ws-imgtile--wide { aspect-ratio: 16 / 10; }
+
+.ws-imgtile__bg {
+  position: absolute; inset: 0;
+  background:
+    repeating-linear-gradient(45deg, transparent 0 14px, rgba(0,0,0,0.04) 14px 15px);
+  display: flex; align-items: center; justify-content: center;
+}
+.ws-imgtile__bg::after {
+  content: attr(data-label);
+  font-family: var(--mono); font-size: calc(var(--u) * 1.6);
+  color: var(--ink-faint); letter-spacing: 0.14em; text-transform: uppercase;
+}
+
+/* Scenic backdrop placeholders — moody photo-like gradients per tone.
+   These stand in for real photography until the user provides imagery. */
+.ws-imgtile[data-tone="dark"] .ws-imgtile__bg {
+  background:
+    radial-gradient(ellipse 70% 60% at 25% 18%, rgba(255,170,120,0.22), transparent 65%),
+    radial-gradient(ellipse 60% 50% at 80% 85%, rgba(90,40,80,0.45), transparent 60%),
+    linear-gradient(160deg, #2a1f25 0%, #181216 55%, #0a070a 100%);
+}
+.ws-imgtile[data-tone="warm"] .ws-imgtile__bg {
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 30%, rgba(255,200,140,0.35), transparent 65%),
+    linear-gradient(160deg, #6b3a2a 0%, #2e1a18 100%);
+}
+.ws-imgtile[data-tone="orange"] .ws-imgtile__bg {
+  background:
+    radial-gradient(ellipse 70% 50% at 70% 30%, rgba(255,180,90,0.45), transparent 65%),
+    linear-gradient(160deg, #8a4a1c 0%, #2a1408 100%);
+}
+.ws-imgtile[data-tone="blue"] .ws-imgtile__bg {
+  background:
+    radial-gradient(ellipse 70% 60% at 60% 20%, rgba(110,180,220,0.35), transparent 65%),
+    linear-gradient(180deg, #1a2c4a 0%, #0a121f 100%);
+}
+.ws-imgtile[data-tone="forest"] .ws-imgtile__bg {
+  background:
+    radial-gradient(ellipse 70% 60% at 40% 25%, rgba(180,210,140,0.25), transparent 65%),
+    linear-gradient(170deg, #1d3326 0%, #0a1410 100%);
+}
+.ws-imgtile[data-tone="plum"] .ws-imgtile__bg {
+  background:
+    radial-gradient(ellipse 70% 60% at 30% 25%, rgba(220,150,200,0.3), transparent 65%),
+    linear-gradient(160deg, #3a1d4a 0%, #160a1f 100%);
+}
+.ws-imgtile .ws-imgtile__bg::after { content: none; }
+
+/* Bottom-up legibility gradient over the backdrop */
+.ws-imgtile::after {
+  content: "";
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.25) 40%, rgba(0,0,0,0.0) 65%);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* The DeviceFrame product shot inside an ImgTile */
+.ws-imgtile__shot {
+  position: absolute;
+  z-index: 1;
+  filter: drop-shadow(0 14px 30px rgba(0,0,0,0.55));
+  pointer-events: none;
+}
+
+/* Layout modes — phone is always centered horizontally now */
+.ws-imgtile[data-layout="center"]  .ws-imgtile__shot {
+  /* Default: phone centered, large, overlapping copy at bottom */
+  top: 4%; left: 50%; transform: translateX(-50%);
+  height: 92%;
+}
+.ws-imgtile[data-layout="hang"]    .ws-imgtile__shot {
+  /* Phone hangs from top, lower portion clipped — Timecode site style */
+  top: 14%; left: 50%; transform: translateX(-50%);
+  height: 88%;
+}
+.ws-imgtile[data-layout="upper"]   .ws-imgtile__shot {
+  /* Phone smaller, centered above copy */
+  top: 5%; left: 50%; transform: translateX(-50%);
+  height: 65%;
+}
+.ws-imgtile[data-layout="float"]   .ws-imgtile__shot {
+  /* Tilted, still horizontally centered, slight offset */
+  top: 4%; left: 50%; transform: translateX(-50%) rotate(-6deg);
+  height: 92%;
+}
+
+/* CARD — wide horizontal layout. Phone right, copy stack on left.
+   This is the new recommended treatment: each client = one wide card. */
+.ws-imgtile[data-layout="card"]    .ws-imgtile__shot {
+  top: 5%; right: 8%;
+  height: 110%;       /* overflows top + bottom slightly — feels grounded */
+}
+.ws-imgtile[data-layout="card"]    .ws-imgtile__overlay {
+  max-width: 52%;
+  margin-top: 0;
+  align-self: stretch;
+  justify-content: center;
+}
+.ws-imgtile[data-layout="card"] {
+  flex-direction: row;
+}
+.ws-imgtile[data-layout="card"]::after {
+  /* Side-to-side gradient instead of bottom-up — keeps left copy legible */
+  background: linear-gradient(to right, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.25) 50%, rgba(0,0,0,0) 80%) !important;
+}
+
+/* CARD-MOBILE — vertical stack version of CARD. Copy top, phone bottom. */
+.ws-imgtile[data-layout="card-mobile"] {
+  flex-direction: column;
+}
+.ws-imgtile[data-layout="card-mobile"]   .ws-imgtile__overlay {
+  margin-top: 0;
+  margin-bottom: auto;
+  max-width: 100%;
+  padding-bottom: 0;
+}
+.ws-imgtile[data-layout="card-mobile"]   .ws-imgtile__shot {
+  top: auto; bottom: -14%;
+  left: 50%; transform: translateX(-50%);
+  height: 64%;
+}
+.ws-imgtile[data-layout="card-mobile"]::after {
+  background: linear-gradient(to bottom, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.2) 40%, rgba(0,0,0,0) 75%) !important;
+}
+
+/* ── Multi-shot (desktop CARD) — continuous infinite-scroll filmstrip ───
+   Phones span the full width of the tile and flow right→left forever.
+   The left text overlay sits on top with a backdrop-filter blur, so
+   phones passing behind it appear softly blurred + darkened. */
+.ws-imgtile--multi .ws-imgtile__shot--multi {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: auto;
+  filter: none;
+  transform: none;
+  height: auto;
+  width: auto;
+}
+/* Disable the default side-to-side gradient overlay — the overlay below
+   provides its own darkening + soft fade edge instead. */
+.ws-imgtile.ws-imgtile--multi::after {
+  display: none;
+}
+
+.ws-multishot {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+.ws-multishot__viewport {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  /* Soft fade on the right so phones materialize gently rather than hard-clipping
+     at the edge as they enter the strip. (Left side is handled by the frosted
+     overlay's own mask.) */
+  -webkit-mask-image: linear-gradient(to right, black 0%, black 88%, transparent 100%);
+  mask-image: linear-gradient(to right, black 0%, black 88%, transparent 100%);
+}
+.ws-multishot__track {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  width: max-content;
+  animation: ws-multishot-scroll 22s linear infinite;
+  will-change: transform;
+}
+.ws-multishot:hover .ws-multishot__track,
+.ws-multishot:focus-within .ws-multishot__track {
+  animation-play-state: paused;
+}
+.ws-multishot__cell {
+  flex: 0 0 auto;
+  height: 92%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 calc(var(--u) * 1.8);
+}
+.ws-multishot__cell .ws-device {
+  height: 100%;
+  width: auto;
+  display: block;
+  filter: drop-shadow(0 18px 30px rgba(0,0,0,0.55));
+}
+@keyframes ws-multishot-scroll {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(-50%, 0, 0); }
+}
+
+/* Frosted overlay — sits over the left half of the tile.
+   backdrop-filter blurs the phones passing behind it. A soft mask on the
+   right edge means the blur fades cleanly into the un-blurred filmstrip. */
+.ws-imgtile[data-layout="card"].ws-imgtile--multi {
+  display: block; /* overlay positions itself absolutely now */
+}
+.ws-imgtile[data-layout="card"].ws-imgtile--multi .ws-imgtile__overlay {
+  position: absolute;
+  inset: 0;
+  width: 52%;
+  max-width: 52%;
+  z-index: 3;
+  padding: calc(var(--u) * 4);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: linear-gradient(to right,
+    rgba(0,0,0,0.78) 0%,
+    rgba(0,0,0,0.60) 55%,
+    rgba(0,0,0,0.20) 85%,
+    rgba(0,0,0,0)    100%);
+  backdrop-filter: blur(10px) saturate(1.05);
+  -webkit-backdrop-filter: blur(10px) saturate(1.05);
+  -webkit-mask-image: linear-gradient(to right, black 0%, black 62%, transparent 100%);
+  mask-image: linear-gradient(to right, black 0%, black 62%, transparent 100%);
+}
+
+/* ── Carousel (mobile CARD-MOBILE) — continuous filmstrip at bottom ───── */
+.ws-imgtile--carousel .ws-imgtile__shot--carousel {
+  position: absolute;
+  z-index: 1;
+  left: 0;
+  right: 0;
+  top: 38%;
+  bottom: -2%;
+  pointer-events: auto;
+  filter: none;
+  transform: none;
+  height: auto;
+  width: auto;
+}
+.ws-carousel {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+.ws-carousel__viewport {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  /* Soft fade at left + right edges so phones materialize at the seams */
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 14%, black 86%, transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0%, black 14%, black 86%, transparent 100%);
+}
+.ws-carousel__track {
+  display: flex;
+  align-items: flex-end;
+  height: 100%;
+  width: max-content;
+  animation: ws-carousel-scroll 18s linear infinite;
+  will-change: transform;
+}
+.ws-carousel:hover .ws-carousel__track,
+.ws-carousel:focus-within .ws-carousel__track {
+  animation-play-state: paused;
+}
+.ws-carousel__cell {
+  flex: 0 0 auto;
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  margin: 0 calc(var(--u) * 1.5);
+}
+.ws-carousel__cell .ws-device {
+  height: 100%;
+  width: auto;
+  display: block;
+  filter: drop-shadow(0 18px 30px rgba(0,0,0,0.55));
+}
+@keyframes ws-carousel-scroll {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(-50%, 0, 0); }
+}
+
+/* Stacked icon (above name in overlay) */
+.ws-imgtile__icon--stacked {
+  position: static !important;
+  width: 64px !important; height: 64px !important;
+  border-radius: 14px !important;
+  margin-bottom: 18px;
+  border: 1px solid rgba(255,255,255,0.25);
+}
+
+/* Copy positioning per layout */
+.ws-imgtile__overlay { margin-top: auto; }
+.ws-imgtile[data-layout="upper"] .ws-imgtile__overlay { text-align: center; }
+
+/* Bottom-up legibility gradient — stronger so copy reads over the phone */
+.ws-imgtile__overlay {
+  position: relative; z-index: 3;
+  padding: calc(var(--u) * 3.5);
+  display: flex; flex-direction: column; gap: 6px;
+}
+.ws-imgtile__icon {
+  position: absolute; top: 18px; right: 18px;
+  width: 56px; height: 56px;
+  border-radius: 12px;
+  background: var(--paper);
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+  z-index: 4;
+  border: 1.4px solid rgba(255,255,255,0.4);
+}
+.ws-imgtile__icon img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+.ws-imgtile__kicker {
+  font-family: var(--mono); font-size: calc(var(--u) * 1.5);
+  letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--paper);
+}
+.ws-imgtile__name {
+  font-family: "Inter", var(--sans);
+  font-weight: 800;
+  font-size: calc(var(--u) * 7);
+  line-height: 0.92;
+  letter-spacing: -0.02em;
+  color: var(--paper);
+  text-transform: uppercase;
+}
+.ws-imgtile__cta {
+  margin-top: 10px;
+  align-self: flex-start;
+  background: var(--paper); color: var(--ink);
+  font-family: var(--mono); font-size: calc(var(--u) * 1.5);
+  letter-spacing: 0.12em; text-transform: uppercase;
+  padding: 8px 14px; border-radius: 999px;
+}
+
+/* Per-tile color hints (different "image" colors so the grid feels colorful) */
+.ws-imgtile[data-tone="warm"]   .ws-imgtile__bg { background-color: #d97a4b; background-blend-mode: multiply; }
+.ws-imgtile[data-tone="orange"] .ws-imgtile__bg { background-color: #e0913a; }
+.ws-imgtile[data-tone="dark"]   .ws-imgtile__bg { background-color: #2b2b2b; }
+.ws-imgtile[data-tone="blue"]   .ws-imgtile__bg { background-color: #2c4a73; }
+.ws-imgtile[data-tone="cream"]  .ws-imgtile__bg { background-color: #e7ddc8; }
+.ws-imgtile[data-tone="cream"]  .ws-imgtile__kicker,
+.ws-imgtile[data-tone="cream"]  .ws-imgtile__name { color: var(--ink); }
+
+/* Full-bleed hero with background image placeholder */
+.ws-fullhero {
+  position: relative;
+  margin: calc(var(--u) * -7) calc(var(--u) * -7) calc(var(--u) * 5);
+  padding: calc(var(--u) * 7);
+  min-height: 540px;
+  display: flex; flex-direction: column; justify-content: center;
+  overflow: hidden;
+  color: var(--paper);
+  border-bottom: 1.4px solid var(--ink);
+}
+.ws-fullhero__bg {
+  position: absolute; inset: 0;
+  background: #060912;
+  overflow: hidden;
+}
+.ws-fullhero__bg canvas {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  display: block;
+}
+.ws-fullhero__content { position: relative; z-index: 1; }
+
+/* Image-led top nav — sits over the hero, transparent */
+.ws-fullhero .ws-nav {
+  border-bottom: none;
+  margin: calc(var(--u) * -4) calc(var(--u) * -2) calc(var(--u) * 6);
+  padding-bottom: 0;
+  color: var(--paper);
+}
+.ws-fullhero .ws-nav__brand,
+.ws-fullhero .ws-nav__links { color: var(--paper); }
+.ws-fullhero .ws-nav__links .is-active { color: var(--paper); border-bottom-color: #ffd664; }
+.ws-fullhero .ws-nav__cta { border-color: var(--paper); color: var(--paper); }
+
+/* Mobile artboard — the artboard IS the phone, no outer frame */
+.ws-mobile {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--hand);
+  width: 100%;
+  min-height: 100%;
+  padding: 18px 18px 28px;
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+.ws-mobile::before {
+  content: "";
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(circle at 20% 30%, rgba(0,0,0,0.025), transparent 60%);
+  pointer-events: none;
+}
+[data-theme="blueprint"] .ws-mobile::before {
+  background: repeating-linear-gradient(0deg, transparent 0, transparent 23px, rgba(255,255,255,0.04) 23px, rgba(255,255,255,0.04) 24px);
+}
+
+/* Mobile status bar (faux) */
+.ws-mstatus {
+  display: flex; justify-content: space-between; align-items: center;
+  font-family: var(--mono); font-size: 11px;
+  margin: -6px -6px 14px;
+  color: var(--ink);
+}
+.ws-mstatus__icons { display: flex; gap: 4px; }
+.ws-mstatus__icons span { display: inline-block; width: 14px; height: 9px; border: 1px solid var(--ink); border-radius: 2px; }
+
+/* Big "hanging" cropped phone — Timecode-style */
+.ws-hangphone {
+  position: relative;
+  width: 86%;
+  margin: 0 auto -120px;   /* hangs off the bottom of its container */
+  border: 2px solid var(--ink);
+  border-radius: 32px 32px 6px 6px;
+  background: var(--ink);
+  padding: 10px 8px 0;
+  box-shadow: 0 -6px 20px rgba(0,0,0,0.08);
+}
+.ws-hangphone__notch {
+  width: 38%; height: 14px;
+  background: var(--paper); border-radius: 0 0 10px 10px;
+  margin: -10px auto 8px;
+  border: 1px solid var(--ink); border-top: 0;
+}
+.ws-hangphone__screen {
+  background: var(--paper-2);
+  border: 1px dashed var(--ink-soft);
+  border-radius: 18px 18px 4px 4px;
+  height: 320px;
+  padding: 10px;
+  overflow: hidden;
+  position: relative;
+  display: flex; flex-direction: column;
+}
+
+/* Plain rounded screenshot card — no phone chrome at all */
+.ws-shot {
+  border: 1.4px solid var(--ink);
+  border-radius: 16px;
+  background: var(--paper-2);
+  overflow: hidden;
+  position: relative;
+  aspect-ratio: 9 / 18;
+  width: 100%;
+  display: flex; flex-direction: column;
+  padding: 14px 12px;
+  gap: 8px;
+}
+.ws-shot__notch {
+  position: absolute; top: 6px; left: 50%; transform: translateX(-50%);
+  width: 30%; height: 5px; background: var(--ink); border-radius: 3px;
+  opacity: 0.6;
+}
+
+/* Carousel dots */
+.ws-dots { display: flex; justify-content: center; gap: 8px; }
+.ws-dots span {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--ink); opacity: 0.25;
+}
+.ws-dots span.is-on { opacity: 1; }
+
+/* Scroll-strip peek hint */
+.ws-peek {
+  display: flex; gap: 14px; align-items: stretch;
+  overflow: hidden;
+}
+.ws-peek > * { flex: 0 0 auto; }

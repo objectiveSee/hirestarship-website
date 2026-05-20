@@ -1,0 +1,424 @@
+/* Namecheap Auctions tile — split + mobile layouts
+   ============================================================================ */
+
+.nc-tile {
+  --nc-ink: #f6f1e3;
+  --nc-ink-soft: rgba(246, 241, 227, 0.78);
+  --nc-ink-faint: rgba(246, 241, 227, 0.46);
+  --nc-up: #6dd49f;
+  --nc-up-bg: rgba(109, 212, 159, 0.16);
+  --nc-down: #ff7c6e;
+  --nc-down-bg: rgba(255, 124, 110, 0.18);
+  --nc-new: #ffd56a;
+  --nc-new-bg: rgba(255, 213, 106, 0.18);
+  --nc-orange: #ff5100;
+
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 22px;
+  border: 1.4px solid #1a1410;
+  color: var(--nc-ink);
+  font-family: "Inter", var(--sans);
+}
+
+/* Tinted backdrop — warm marketplace */
+.nc-tile__bg {
+  position: absolute; inset: 0;
+  z-index: 0;
+}
+.nc-tile[data-tone="warm"] .nc-tile__bg {
+  background:
+    radial-gradient(ellipse 70% 60% at 18% 18%, rgba(255,180,110,0.34), transparent 65%),
+    radial-gradient(ellipse 50% 40% at 90% 90%, rgba(255,90,40,0.22), transparent 65%),
+    linear-gradient(160deg, #6b3a2a 0%, #2e1a18 100%);
+}
+
+/* ── Feed component ──────────────────────────────────────────────────────── */
+.nc-feed {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-family: "JetBrains Mono", ui-monospace, Menlo, monospace;
+}
+.nc-feed--comfortable .nc-feed__row { padding: 12px 14px; }
+.nc-feed--dense       .nc-feed__row { padding: 8px 12px;  gap: 10px; }
+
+.nc-feed__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  background-color: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.10);
+  border-radius: 10px;
+  transition: background-color 700ms ease-out, border-color 700ms ease-out, transform 320ms cubic-bezier(0.65,0,0.35,1);
+}
+.nc-feed__row.is-up {
+  background-color: var(--nc-up-bg);
+  border-color: rgba(109, 212, 159, 0.55);
+  transform: translateY(-1px);
+}
+.nc-feed__row.is-outbid {
+  background-color: var(--nc-down-bg);
+  border-color: rgba(255, 124, 110, 0.55);
+}
+.nc-feed__row.is-new {
+  background-color: var(--nc-new-bg);
+  border-color: rgba(255, 213, 106, 0.55);
+}
+
+.nc-feed__main {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  flex: 1 1 auto;
+}
+.nc-feed__domain {
+  font-family: "JetBrains Mono", ui-monospace, Menlo, monospace;
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: 0.01em;
+  color: var(--nc-ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.nc-feed--dense .nc-feed__domain { font-size: 13px; }
+.nc-feed__meta {
+  font-family: "JetBrains Mono", ui-monospace, Menlo, monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  color: var(--nc-ink-faint);
+  text-transform: uppercase;
+}
+.nc-feed--dense .nc-feed__meta { font-size: 9.5px; }
+
+.nc-feed__right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 0 0 auto;
+}
+.nc-feed__bid {
+  font-family: "JetBrains Mono", ui-monospace, Menlo, monospace;
+  font-weight: 700;
+  font-size: 17px;
+  color: var(--nc-ink);
+  letter-spacing: 0.01em;
+  font-variant-numeric: tabular-nums;
+}
+.nc-feed--dense .nc-feed__bid { font-size: 14px; }
+
+.nc-feed__delta {
+  font-family: "JetBrains Mono", ui-monospace, Menlo, monospace;
+  font-weight: 700;
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 3px 7px;
+  border-radius: 6px;
+  border: 1px solid currentColor;
+  animation: nc-flash-pop 700ms ease-out;
+  white-space: nowrap;
+}
+.nc-feed--dense .nc-feed__delta { font-size: 9px; padding: 2px 6px; }
+.nc-feed__delta--up     { color: var(--nc-up); }
+.nc-feed__delta--outbid { color: var(--nc-down); }
+.nc-feed__delta--new    { color: var(--nc-new); }
+
+@keyframes nc-flash-pop {
+  0%   { opacity: 0; transform: translateX(-6px) scale(0.92); }
+  30%  { opacity: 1; transform: translateX(0) scale(1.04); }
+  100% { opacity: 1; transform: translateX(0) scale(1); }
+}
+
+/* ── Wordmark + kicker + name + desc ─────────────────────────────────────── */
+.nc-wordmark {
+  /* Wordmark is orange icon + white text (recolored from gray) on dark backdrop. */
+  display: block;
+  align-self: flex-start;
+}
+
+.nc-tile__kicker {
+  font-family: "JetBrains Mono", ui-monospace, Menlo, monospace;
+  font-size: 11.5px;
+  letter-spacing: 0.18em;
+  color: var(--nc-ink-soft);
+  text-transform: uppercase;
+}
+.nc-tile__name {
+  font-family: "Inter", var(--sans);
+  font-weight: 800;
+  font-size: 56px;
+  line-height: 0.98;
+  letter-spacing: -0.025em;
+  color: var(--nc-ink);
+  margin-top: -2px;
+}
+.nc-tile__name--compact {
+  font-size: 48px;
+}
+.nc-tile__desc {
+  font-size: 14.5px;
+  line-height: 1.5;
+  color: var(--nc-ink-soft);
+  max-width: 460px;
+  text-wrap: pretty;
+}
+
+/* ── Tech chips ──────────────────────────────────────────────────────────── */
+.nc-techrow {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.nc-techchip {
+  font-family: "JetBrains Mono", ui-monospace, Menlo, monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--nc-ink);
+  padding: 5px 9px 6px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.18);
+  background: rgba(255,255,255,0.05);
+  white-space: nowrap;
+}
+
+/* ── Feed label (live pulse dot) ─────────────────────────────────────────── */
+.nc-tile__feed-label {
+  font-family: "JetBrains Mono", ui-monospace, Menlo, monospace;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  color: var(--nc-ink-soft);
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.nc-tile__feed-label::before {
+  content: "";
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--nc-up);
+  box-shadow: 0 0 0 0 rgba(109, 212, 159, 0.45);
+  animation: nc-pulse 1.6s ease-out infinite;
+}
+@keyframes nc-pulse {
+  0%   { box-shadow: 0 0 0 0 rgba(109, 212, 159, 0.55); }
+  100% { box-shadow: 0 0 0 8px rgba(109, 212, 159, 0); }
+}
+.nc-tile__feed-fade {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 80px;
+  background: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.45) 100%);
+  pointer-events: none;
+}
+
+/* ── Desktop: three-column split ─────────────────────────────────────────
+   Copy left, feed center, phone right. */
+.nc-tile--split {
+  display: grid;
+  grid-template-columns: 1.15fr 1.05fr 0.9fr;
+  gap: 0;
+  padding: 32px;
+  box-sizing: border-box;
+  align-items: stretch;
+}
+.nc-tile--split > .nc-tile__bg { z-index: 0; }
+.nc-tile--split .nc-tile__col {
+  position: relative;
+  z-index: 2;
+  min-width: 0;
+}
+.nc-tile--split .nc-tile__col--copy {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 16px;
+  padding-right: 28px;
+}
+.nc-tile--split .nc-tile__col--feed {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 0 24px;
+  border-left: 1px solid rgba(255,255,255,0.10);
+  border-right: 1px solid rgba(255,255,255,0.10);
+  overflow: hidden;
+}
+.nc-tile--split .nc-tile__col--phone {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  padding-left: 24px;
+  padding-top: 6px;
+}
+.nc-tile--split .nc-tile__col--phone .nc-pager {
+  height: 100%;
+  filter: drop-shadow(0 22px 36px rgba(0,0,0,0.55));
+}
+
+/* ── Mobile: vertical, three rows ────────────────────────────────────────── */
+.nc-tile--mobile {
+  display: flex;
+  flex-direction: column;
+  padding: 26px 20px;
+  box-sizing: border-box;
+  gap: 22px;
+}
+.nc-tile--mobile > .nc-tile__bg { z-index: 0; }
+.nc-tile--mobile .nc-tile__row {
+  position: relative;
+  z-index: 2;
+}
+.nc-tile--mobile .nc-tile__row--copy {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.nc-tile--mobile .nc-tile__row--copy .nc-tile__desc { max-width: none; }
+.nc-tile--mobile .nc-tile__row--feed {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px 0;
+  border-top: 1px solid rgba(255,255,255,0.10);
+  border-bottom: 1px solid rgba(255,255,255,0.10);
+}
+.nc-tile--mobile .nc-tile__row--phone {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  height: 620px;
+  margin-top: 4px;
+}
+.nc-tile--mobile .nc-tile__row--phone .nc-pager {
+  height: 100%;
+  filter: drop-shadow(0 22px 36px rgba(0,0,0,0.55));
+}
+
+/* ── Screen pager — paginated UIScrollView feel ──────────────────────────
+   Promo images already include an iPhone bezel + caption. Pager slides one
+   full page at a time, every 8s by default. */
+.nc-pager {
+  position: relative;
+  height: 100%;
+  aspect-ratio: 230 / 499;
+  overflow: hidden;
+  border-radius: 18px;
+  background: #e8e3d8;
+}
+.nc-pager__track {
+  display: flex;
+  height: 100%;
+  will-change: transform;
+  transition: transform 760ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.nc-pager__page {
+  flex: 0 0 auto;
+  height: 100%;
+  display: block;
+}
+.nc-pager__page img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+.nc-pager__dots {
+  position: absolute;
+  bottom: 10px;
+  left: 0; right: 0;
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  z-index: 2;
+}
+.nc-pager__dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: rgba(26, 20, 16, 0.22);
+  transition: background 360ms ease-out, transform 360ms ease-out;
+}
+.nc-pager__dot.is-active {
+  background: rgba(26, 20, 16, 0.78);
+  transform: scale(1.25);
+}
+
+/* ── Store buttons ───────────────────────────────────────────────────────
+   Standard Apple/Google badge shape — black pill, 2-line text, ~140-160px
+   wide. PLACEHOLDER glyphs; swap for official PNGs before ship. */
+.nc-storerow {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 6px;
+}
+.nc-storebtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 14px 9px;
+  border-radius: 10px;
+  background: #000;
+  color: #fff;
+  text-decoration: none;
+  border: 1px solid rgba(255,255,255,0.22);
+  font-family: "Inter", var(--sans);
+  transition: transform 160ms ease-out, background 160ms ease-out, border-color 160ms ease-out;
+  cursor: pointer;
+}
+.nc-storebtn:hover {
+  transform: translateY(-1px);
+  border-color: rgba(255,255,255,0.40);
+}
+.nc-storebtn--sm {
+  padding: 7px 12px 8px;
+  border-radius: 9px;
+}
+.nc-storebtn__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  flex: 0 0 28px;
+  color: #fff;
+}
+.nc-storebtn--sm .nc-storebtn__icon {
+  width: 24px;
+  flex: 0 0 24px;
+}
+.nc-storebtn__icon svg { display: block; }
+.nc-storebtn__text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+  text-align: left;
+  min-width: 0;
+}
+.nc-storebtn__small {
+  font-size: 9.5px;
+  letter-spacing: 0.04em;
+  opacity: 0.85;
+  font-family: "Inter", var(--sans);
+}
+.nc-storebtn__big {
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin-top: 2px;
+  font-family: "Inter", var(--sans);
+}
+.nc-storebtn--sm .nc-storebtn__big { font-size: 14px; }
+.nc-storebtn--sm .nc-storebtn__small { font-size: 8.5px; }
