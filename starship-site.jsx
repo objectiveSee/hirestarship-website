@@ -229,18 +229,19 @@ function TimecodeTile() {
             <span className="tc-colon tc-seg-3">:</span>
             <span className="tc-seg tc-seg-4 tc-frames">{tc.f}</span>
           </div>
-          <div className="ssp-tc__head">
+          <a className="ssp-tc__head" href="https://timecodeplus.com" target="_blank" rel="noopener" aria-label="Visit timecodeplus.com">
             <img className="ssp-tc__icon" src={_A("tcAppIcon", "assets/timecode/app-icon.png")} alt="" />
             <div className="ssp-tc__heading">
               <div className="ssp-tc__kicker">iOS · Web</div>
               <div className="ssp-tc__name">Timecode+</div>
             </div>
-          </div>
+          </a>
           <div className="ssp-tc__sub">Production logging for film and TV. Drop time-stamped markers as you shoot, then export straight to Final Cut, Resolve, or Premiere.</div>
           <div className="ssp-tc__stores">
             <a className="ssp-rp__badge" href="https://apps.apple.com/us/app/timecode-cameraman/id590534084" target="_blank" rel="noopener" aria-label="Download Timecode+ on the App Store">
               <img src={APPSTORE_BADGE} alt="Download on the App Store" />
             </a>
+            <a className="ssp-tc__site-link" href="https://timecodeplus.com" target="_blank" rel="noopener">timecodeplus.com →</a>
           </div>
           <ProjectChips client={TIMECODE} variant="inline" />
         </div>
