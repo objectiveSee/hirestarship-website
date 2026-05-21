@@ -37,9 +37,8 @@ function Hero() {
           <a className="ssp-nav__cta" href={`mailto:${COPY.contact}`}>Say hi →</a>
         </nav>
         <div className="ssp-hero__body">
-          <div className="ssp-hero__kicker">A small studio</div>
           <h1 className="ssp-hero__title">Software<br/>that holds up.</h1>
-          <p className="ssp-hero__intro">Mobile, web, and AI for a handful of clients we know well.</p>
+          <p className="ssp-hero__intro">Mobile, web, and AI integrations, built right.</p>
           <div className="ssp-hero__ctas">
             <a className="pri" href="#work">See the work</a>
             <span className="sec">{COPY.contact}</span>
