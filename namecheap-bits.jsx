@@ -44,7 +44,8 @@ const AuctionFeed = ({ count = 8, interval = 1100, density = "comfortable", styl
   );
 
   useEffect(() => {
-    const t = setInterval(() => {
+    let t;
+    const tick = () => {
       setItems(prev => {
         const cleared = prev.map(it => ({ ...it, flash: null, delta: null }));
         const idx = Math.floor(Math.random() * cleared.length);
@@ -63,8 +64,13 @@ const AuctionFeed = ({ count = 8, interval = 1100, density = "comfortable", styl
         }
         return cleared;
       });
-    }, interval);
-    return () => clearInterval(t);
+      // Jittered cadence — center on `interval`, vary 0.35×–2.4× so updates
+      // feel like a real auction feed instead of a metronome.
+      const next = interval * (0.35 + Math.random() * 2.05);
+      t = setTimeout(tick, next);
+    };
+    t = setTimeout(tick, interval * (0.35 + Math.random() * 2.05));
+    return () => clearTimeout(t);
   }, [interval]);
 
   return (
@@ -220,7 +226,6 @@ const NCTile_Split = ({ feedSpeed = 1100, pageInterval = 8000 }) => (
     <div className="nc-tile__col nc-tile__col--feed">
       <div className="nc-tile__feed-label">Live · last few seconds</div>
       <AuctionFeed count={9} interval={feedSpeed} density="comfortable" />
-      <div className="nc-tile__feed-fade" />
     </div>
     <div className="nc-tile__col nc-tile__col--phone">
       <NCScreenPager interval={pageInterval} />

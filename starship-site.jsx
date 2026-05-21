@@ -41,7 +41,7 @@ function Hero() {
           <h1 className="ssp-hero__title">Software<br/>that holds up.</h1>
           <p className="ssp-hero__intro">Mobile, web, and AI for a handful of clients we know well.</p>
           <div className="ssp-hero__ctas">
-            <a className="pri" href="#radio-paradise">See the work</a>
+            <a className="pri" href="#work">See the work</a>
             <span className="sec">{COPY.contact}</span>
           </div>
         </div>
