@@ -201,10 +201,9 @@ const NCScopeCopy = ({ compact = false }) => (
     </div>
     <div className="nc-tile__kicker">React Native · iOS · Android</div>
     <div className="nc-tile__desc">
-      Owned v1 of Namecheap's mobile app for the domain marketplace, end&#8209;to&#8209;end —
-      architecture, screens, auth, bidding, and ship. Built in React Native + Expo.
-      iOS Live Activities surface in&#8209;flight auctions on the lock screen and
-      Dynamic Island in real time. Released on the App Store and Google Play.
+      Namecheap's mobile app for domain auctions — built in React Native + Expo.
+      Real-time bidding over WebSockets, Live Activities and Dynamic Island on iOS,
+      and push notifications the moment someone outbids you.
     </div>
     <TechRow items={NC_TECH} />
     <StoreButtonRow />
