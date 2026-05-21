@@ -13,7 +13,7 @@
   --ssp-live: #ff4d4d;
 }
 
-html, body { margin: 0; padding: 0; background: var(--ssp-paper); color: var(--ssp-ink); font-family: var(--ssp-sans); }
+html, body { margin: 0; padding: 0; background: var(--ssp-paper); color: var(--ssp-ink); font-family: var(--ssp-sans); overflow-x: clip; }
 
 .ssp-page {
   max-width: 1480px;
@@ -279,6 +279,19 @@ html, body { margin: 0; padding: 0; background: var(--ssp-paper); color: var(--s
   background: rgba(0, 0, 0, 0.35);
   border: 1px solid rgba(246, 243, 236, 0.28);
   color: var(--ssp-paper);
+}
+
+/* Radio Paradise chips need more punch — the currents shader behind
+   them is alive and washes out a low-contrast pill. Solid dark fill,
+   subtle blur for separation, brighter border. */
+.ssp-rp__body .ssp-chips--inline li,
+.ssp-rp__body .ssp-chips--inline li.is-feat {
+  background: rgba(10, 13, 20, 0.72);
+  border-color: rgba(246, 243, 236, 0.42);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  font-weight: 500;
+  padding: 7px 12px;
 }
 
 /* ============================================================
@@ -962,16 +975,41 @@ html, body { margin: 0; padding: 0; background: var(--ssp-paper); color: var(--s
     grid-template-columns: 1fr;
   }
   .ssp-tc__left {
-    padding: 32px 24px 0;
+    padding: 40px 24px 8px;
     max-width: none;
-    gap: 16px;
+    gap: 14px;
+    align-items: center;
+    text-align: center;
   }
-  .ssp-tc__name { font-size: 40px; }
-  .ssp-tc__sub  { font-size: 14.5px; max-width: none; }
-  .ssp-tc__clock { font-size: 18px; padding: 8px 14px; letter-spacing: 1px; }
+
+  /* Clock sits below the title, centered. */
+  .ssp-tc__clock {
+    align-self: center;
+    font-size: 22px;
+    padding: 12px 20px;
+    letter-spacing: 2px;
+    border-radius: 14px;
+  }
+
+  /* Drop the small app icon on mobile — title carries it. */
+  .ssp-tc__icon { display: none; }
+  .ssp-tc__head {
+    width: 100%;
+    justify-content: center;
+    gap: 0;
+  }
+  .ssp-tc__heading { align-items: center; gap: 6px; }
+  .ssp-tc__kicker { opacity: 0.55; }
+  .ssp-tc__name { font-size: 44px; }
+  .ssp-tc__sub  { font-size: 15px; max-width: 38ch; opacity: 0.78; }
+
+  .ssp-tc__stores {
+    justify-content: center;
+    margin-top: 8px;
+  }
 
   .ssp-tc__right {
-    padding: 24px 24px 28px;
+    padding: 28px 24px 32px;
   }
   .ssp-tc__shots .ssp-rp-phone {
     height: auto;
@@ -982,8 +1020,9 @@ html, body { margin: 0; padding: 0; background: var(--ssp-paper); color: var(--s
 
   /* Quieter chips on mobile (footnote, not headline). */
   .ssp-tc__left .ssp-chips--inline {
-    margin-top: 8px;
+    margin-top: 6px;
     gap: 5px;
+    justify-content: center;
   }
   .ssp-tc__left .ssp-chips--inline li,
   .ssp-tc__left .ssp-chips--inline li.is-feat {

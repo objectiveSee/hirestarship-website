@@ -197,10 +197,10 @@ function useTimecode() {
 
 /* ───── Timecode+ — bespoke tile with live clock + screenshot carousel ──── */
 const TC_SHOTS = [
-  { id: "tcDictation",  fallback: "assets/timecode/dictation.png",  alt: "Timecode+ — live dictation while recording" },
   { id: "tcMarkerList", fallback: "assets/timecode/marker-list.png", alt: "Timecode+ — marker list" },
   { id: "tcExport",     fallback: "assets/timecode/export.png",      alt: "Timecode+ — export to NLEs" },
   { id: "tcNewNote",    fallback: "assets/timecode/new-note.png",    alt: "Timecode+ — new note" },
+  { id: "tcDictation",  fallback: "assets/timecode/dictation.png",   alt: "Timecode+ — live dictation while recording" },
 ];
 
 function TimecodeTile() {
@@ -214,6 +214,13 @@ function TimecodeTile() {
     <div className="ssp-tc-tile" data-screen-label="Timecode+">
       <div className="ssp-tc-tile__content">
         <div className="ssp-tc__left">
+          <a className="ssp-tc__head" href="https://timecodeplus.com" target="_blank" rel="noopener" aria-label="Visit timecodeplus.com">
+            <img className="ssp-tc__icon" src={_A("tcAppIcon", "assets/timecode/app-icon.png")} alt="" />
+            <div className="ssp-tc__heading">
+              <div className="ssp-tc__kicker">iOS · Web</div>
+              <div className="ssp-tc__name">Timecode+</div>
+            </div>
+          </a>
           <div className="ssp-tc__clock" aria-label={`Live timecode ${tc.h}:${tc.m}:${tc.s}:${tc.f}`}>
             <span className="tc-seg tc-seg-1">{tc.h}</span>
             <span className="tc-colon tc-seg-1">:</span>
@@ -223,13 +230,6 @@ function TimecodeTile() {
             <span className="tc-colon tc-seg-3">:</span>
             <span className="tc-seg tc-seg-4 tc-frames">{tc.f}</span>
           </div>
-          <a className="ssp-tc__head" href="https://timecodeplus.com" target="_blank" rel="noopener" aria-label="Visit timecodeplus.com">
-            <img className="ssp-tc__icon" src={_A("tcAppIcon", "assets/timecode/app-icon.png")} alt="" />
-            <div className="ssp-tc__heading">
-              <div className="ssp-tc__kicker">iOS · Web</div>
-              <div className="ssp-tc__name">Timecode+</div>
-            </div>
-          </a>
           <div className="ssp-tc__sub">Production logging for film and TV. Drop time-stamped markers as you shoot, then export straight to Final Cut, Resolve, or Premiere.</div>
           <div className="ssp-tc__stores">
             <a className="ssp-rp__badge" href="https://apps.apple.com/us/app/timecode-cameraman/id590534084" target="_blank" rel="noopener" aria-label="Download Timecode+ on the App Store">

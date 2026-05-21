@@ -324,8 +324,8 @@ const CLIENTS = [
       _A('tcNewNote',    'assets/timecode/new-note.png'),
     ],
     tone: "dark",
-    stack:    ["Swift", "SwiftUI", "Next.js", "TypeScript"],
-    features: ["Frame-accurate timecode", "Marker sync", "Project export"]
+    stack:    ["Swift", "Next.js", "TypeScript"],
+    features: []
   },
   {
     name: "Namecheap — Auctions",
@@ -346,8 +346,8 @@ const CLIENTS = [
     desc: "Ongoing mobile work for the listener-supported radio station.",
     link: "https://apps.apple.com/us/app/radio-paradise/id517818306",
     linkLabel: "App Store ↗",
-    stack:    ["React Native", "Expo", "AVFoundation", "Media3 (ExoPlayer)"],
-    features: ["Gapless audio playback", "Lossless streaming"]
+    stack:    ["React Native", "TypeScript", "Expo", "AVFoundation", "Media3 (ExoPlayer)", "Skia"],
+    features: ["Lossless streaming"]
   },
   {
     name: "BETA",
