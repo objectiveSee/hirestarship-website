@@ -972,13 +972,13 @@ html { scroll-behavior: smooth; }
     padding: 40px 24px 8px;
     max-width: none;
     gap: 14px;
-    align-items: center;
-    text-align: center;
+    align-items: flex-start;
+    text-align: left;
   }
 
-  /* Clock sits below the title, centered. */
+  /* Clock sits below the title, left-aligned to match other tiles. */
   .ssp-tc__clock {
-    align-self: center;
+    align-self: flex-start;
     font-size: 22px;
     padding: 12px 20px;
     letter-spacing: 2px;
@@ -989,7 +989,7 @@ html { scroll-behavior: smooth; }
   .ssp-tc__icon { display: none; }
   .ssp-tc__head {
     width: 100%;
-    justify-content: center;
+    justify-content: flex-start;
     gap: 0;
   }
   .ssp-tc__kicker { opacity: 0.55; }
@@ -997,7 +997,7 @@ html { scroll-behavior: smooth; }
   .ssp-tc__sub  { font-size: 15px; max-width: 38ch; opacity: 0.78; }
 
   .ssp-tc__stores {
-    justify-content: center;
+    justify-content: flex-start;
     margin-top: 8px;
   }
 
@@ -1015,7 +1015,7 @@ html { scroll-behavior: smooth; }
   .ssp-tc__left .ssp-chips--inline {
     margin-top: 6px;
     gap: 5px;
-    justify-content: center;
+    justify-content: flex-start;
   }
   .ssp-tc__left .ssp-chips--inline li,
   .ssp-tc__left .ssp-chips--inline li.is-feat {
@@ -1024,5 +1024,188 @@ html { scroll-behavior: smooth; }
     background: rgba(0, 0, 0, 0.22);
     border-color: rgba(246, 243, 236, 0.18);
     opacity: 0.85;
+  }
+}
+
+/* ─── Floating contact pill ──────────────────────────────────────────────
+   Persistent bottom-right CTA. Matches the hero's dark navy with paper text,
+   and an inset paper-on-ink chip for the action. */
+.ssp-fab {
+  position: fixed;
+  right: 22px;
+  bottom: 22px;
+  z-index: 50;
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  padding: 8px 8px 8px 22px;
+  background: #2D44FF;
+  color: #ffffff;
+  font-family: var(--ssp-sans);
+  font-weight: 500;
+  font-size: 15px;
+  text-decoration: none;
+  border-radius: 999px;
+  box-shadow:
+    0 10px 30px rgba(45, 68, 255, 0.32),
+    0 2px 8px rgba(0, 0, 0, 0.18);
+  transition: transform 220ms ease, box-shadow 220ms ease, background-color 200ms ease;
+}
+.ssp-fab:hover {
+  transform: translateY(-2px);
+  background: #1B33F2;
+  box-shadow:
+    0 14px 36px rgba(45, 68, 255, 0.42),
+    0 3px 10px rgba(0, 0, 0, 0.22);
+}
+.ssp-fab__btn {
+  background: #ffffff;
+  color: #2D44FF;
+  padding: 9px 18px;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+@media (max-width: 700px) {
+  .ssp-fab {
+    right: 12px;
+    bottom: 12px;
+    gap: 10px;
+    padding: 6px 6px 6px 16px;
+    font-size: 13px;
+  }
+  .ssp-fab__btn { padding: 8px 14px; font-size: 13px; }
+}
+
+/* ─── BETA Technologies tile ─────────────────────────────────────────────
+   Looping marketing reel as background, dark gradient overlay,
+   monochrome content sitting bottom-left. */
+.ssp-beta-tile {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 0;
+  overflow: hidden;
+  background: #050505;
+  color: #f6f3ec;
+  isolation: isolate;
+}
+.ssp-beta-tile__video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+  filter: grayscale(0.15) contrast(1.05);
+}
+.ssp-beta-tile__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    linear-gradient(180deg, rgba(0,0,0,0.10) 0%, rgba(0,0,0,0.20) 40%, rgba(0,0,0,0.78) 100%),
+    linear-gradient(90deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.10) 55%, rgba(0,0,0,0.0) 100%);
+}
+.ssp-beta-tile__content {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 40px 48px 44px;
+  gap: 12px;
+  max-width: 720px;
+}
+.ssp-beta-tile__ticker {
+  font-family: "JetBrains Mono", ui-monospace, Menlo, monospace;
+  font-size: 0.78em;
+  letter-spacing: 0.08em;
+  opacity: 0.78;
+  white-space: nowrap;
+}
+.ssp-beta-tile__stores {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 14px;
+  flex-wrap: wrap;
+}
+.ssp-beta-tile__badge {
+  display: inline-flex;
+  height: 44px;
+  line-height: 0;
+}
+.ssp-beta-tile__badge img {
+  height: 100%;
+  width: auto;
+  display: block;
+}
+.ssp-beta-tile__badge:hover { opacity: 0.85; }
+.ssp-beta-tile__name {
+  font-family: var(--ssp-sans);
+  font-weight: 800;
+  font-size: clamp(48px, 6vw, 72px);
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+.ssp-beta-tile__kicker {
+  font-family: "JetBrains Mono", ui-monospace, Menlo, monospace;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.7;
+  margin-top: 2px;
+}
+.ssp-beta-tile__desc {
+  font-size: 16px;
+  line-height: 1.55;
+  opacity: 0.92;
+  max-width: 58ch;
+  margin-top: 6px;
+}
+.ssp-beta-tile__chips {
+  list-style: none;
+  padding: 0;
+  margin: 8px 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.ssp-beta-tile__chips li {
+  font-family: "JetBrains Mono", ui-monospace, Menlo, monospace;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 6px 12px;
+  border: 1px solid rgba(255,255,255,0.30);
+  border-radius: 999px;
+  background: rgba(0,0,0,0.32);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+@media (max-width: 900px) {
+  .ssp-beta-tile {
+    aspect-ratio: auto;
+    min-height: 520px;
+  }
+  .ssp-beta-tile__content {
+    padding: 32px 24px 28px;
+    max-width: none;
+  }
+  .ssp-beta-tile__name {
+    font-size: 44px;
+  }
+  .ssp-beta-tile__desc {
+    font-size: 15px;
+  }
+  .ssp-beta-tile__overlay {
+    background:
+      linear-gradient(180deg, rgba(0,0,0,0.20) 0%, rgba(0,0,0,0.45) 50%, rgba(0,0,0,0.85) 100%);
   }
 }

@@ -258,12 +258,80 @@ function TimecodeTile() {
   );
 }
 
+/* ───── BETA Technologies — cinematic looping-video tile ──────────────────
+   Background is a quiet, looping clip from BETA's own marketing reel;
+   copy and chips sit on top of a dark gradient overlay. Brand vibe is
+   stark monochrome aerospace, so this tile is darker and quieter than
+   the others on purpose. */
+const BETA_TECH = ["React Native", "Expo", "Real-time", "Live telemetry"];
+
+function BetaTile() {
+  return (
+    <div className="ssp-beta-tile" data-tone="cinematic">
+      <video
+        className="ssp-beta-tile__video"
+        src="assets/beta/hero-loop.mp4"
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="auto"
+        aria-hidden="true"
+      />
+      <div className="ssp-beta-tile__overlay" aria-hidden="true" />
+      <div className="ssp-beta-tile__content">
+        <div className="ssp-beta-tile__name">BETA<br/>Technologies</div>
+        <div className="ssp-beta-tile__kicker">React Native · iOS · Android</div>
+        <div className="ssp-beta-tile__desc">
+          BETA Technologies <span className="ssp-beta-tile__ticker">(NYSE: BETA)</span> shipped
+          their first mobile app — built in React Native + Expo.
+          Real-time status across the cross-country charging network
+          and live state-of-charge monitoring for an electric aircraft fleet.
+        </div>
+        <ul className="ssp-beta-tile__chips">
+          {BETA_TECH.map(t => <li key={t}>{t}</li>)}
+        </ul>
+        <div className="ssp-beta-tile__stores">
+          <a
+            className="ssp-beta-tile__badge"
+            href="https://apps.apple.com/us/app/beta-technologies/id1615477994"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Download BETA Technologies on the App Store"
+          >
+            <img src="assets/badges/appstore-white.svg" alt="Download on the App Store" />
+          </a>
+          <a
+            className="ssp-beta-tile__badge ssp-beta-tile__badge--play"
+            href="https://play.google.com/store/apps/details?id=io.tech.beta.app"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Get BETA Technologies on Google Play"
+          >
+            <img src="assets/badges/googleplay-trimmed.png" alt="Get it on Google Play" />
+          </a>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 /* ───── Project section wrapper ─────────────────────────────────────────── */
 const Project = ({ id, label, children }) => (
   <section className="ssp-project" id={id} data-screen-label={label}>
     {children}
   </section>
 );
+
+/* ───── Floating contact pill (bottom-right, follows the page) ───────────── */
+function ContactFab() {
+  return (
+    <a className="ssp-fab" href={`mailto:${COPY.contact}`} aria-label={`Email ${COPY.contact}`}>
+      <span className="ssp-fab__q">Building something…</span>
+      <span className="ssp-fab__btn">Say hi</span>
+    </a>
+  );
+}
 
 /* ───── Page ─────────────────────────────────────────────────────────────── */
 function StarshipSite() {
@@ -297,6 +365,11 @@ function StarshipSite() {
               <NCTile_Split feedSpeed={1100} pageInterval={8000} />
             </div>
           </Project>
+
+          {/* 4 · BETA Technologies — cinematic video-backed tile. */}
+          <Project id="beta" label="BETA Technologies">
+            <BetaTile />
+          </Project>
         </div>
       </div>
 
@@ -312,6 +385,8 @@ function StarshipSite() {
           <span>Worldwide</span>
         </div>
       </footer>
+
+      <ContactFab />
     </div>
   );
 }
