@@ -37,7 +37,7 @@ function Hero() {
           <a className="ssp-nav__cta" href={`mailto:${COPY.contact}`}>Say hi →</a>
         </nav>
         <div className="ssp-hero__body">
-          <div className="ssp-hero__kicker">A small studio · since 2005</div>
+          <div className="ssp-hero__kicker">A small studio</div>
           <h1 className="ssp-hero__title">Software<br/>that holds up.</h1>
           <p className="ssp-hero__intro">Mobile, web, and AI for a handful of clients we know well.</p>
           <div className="ssp-hero__ctas">
@@ -70,7 +70,7 @@ function Expertise() {
         </div>
         <div className="ssp-expertise__col">
           <div className="ssp-expertise__big">AI</div>
-          <div className="ssp-expertise__sub">Practical AI consulting — evals, RAG, agents, fine-tuning. We help teams ship features that actually work in production.</div>
+          <div className="ssp-expertise__sub">Agentic workflows and AI integrations. Claude and the SDKs around it, wired into existing products and the tools teams already use.</div>
         </div>
       </div>
     </section>
@@ -126,7 +126,7 @@ function RadioParadiseTile() {
           <div className="ssp-rp__live">On Air</div>
           <div className="ssp-rp__body">
             <img className="ssp-rp__wordmark" src={_A('rpLogo', 'assets/radio-paradise-logo.png')} alt="Radio Paradise — Human Curated Radio" />
-            <div className="ssp-rp__sub">Hand-picked by human DJs. Ad-free, lossless internet radio — the way it should be.</div>
+            <div className="ssp-rp__sub">Radio Paradise's mobile app for ad-free, DJ-curated internet radio on iOS and Android — built in React Native + TypeScript with Expo. AVFoundation drives iOS playback, Media3/ExoPlayer handles Android, and Skia powers the cross-platform slideshow and visualizations.</div>
             <div className="ssp-rp__stores">
               <a className="ssp-rp__badge" href="https://apps.apple.com/us/app/radio-paradise/id517818306" target="_blank" rel="noopener" aria-label="Download on the App Store">
                 <img src={APPSTORE_BADGE} alt="Download on the App Store" />
@@ -220,7 +220,7 @@ function TimecodeTile() {
             <span className="tc-colon tc-seg-3">:</span>
             <span className="tc-seg tc-seg-4 tc-frames">{tc.f}</span>
           </div>
-          <div className="ssp-tc__sub">Production logging for film and TV. Drop time-stamped markers as you shoot, then export straight to Final Cut, Resolve, or Premiere.</div>
+          <div className="ssp-tc__sub">Timecode+ is time-coded note-taking for film and TV — an iOS app built in Swift. A live timecode generator, one-tap markers pinned to frame, on-device transcription, and exports to FCPXML, EDL, Premiere XML, and ALE.</div>
           <div className="ssp-tc__stores">
             <a className="ssp-rp__badge" href="https://apps.apple.com/us/app/timecode-cameraman/id590534084" target="_blank" rel="noopener" aria-label="Download Timecode+ on the App Store">
               <img src={APPSTORE_BADGE} alt="Download on the App Store" />
@@ -284,7 +284,7 @@ function BetaTile() {
         <div className="ssp-beta-tile__kicker">React Native · iOS · Android</div>
         <div className="ssp-beta-tile__desc">
           BETA Technologies <span className="ssp-beta-tile__ticker">(NYSE: BETA)</span> shipped
-          their first mobile app — built in React Native + Expo.
+          their first mobile app for iOS and Android — built in React Native + Expo.
           Real-time status across the cross-country charging network
           and live state-of-charge monitoring for an electric aircraft fleet.
         </div>
@@ -326,7 +326,14 @@ const Project = ({ id, label, children }) => (
 /* ───── Floating contact pill (bottom-right, follows the page) ───────────── */
 function ContactFab() {
   return (
-    <a className="ssp-fab" href={`mailto:${COPY.contact}`} aria-label={`Email ${COPY.contact}`}>
+    <a
+      className="ssp-fab"
+      href={`mailto:${COPY.contact}`}
+      onClick={() => {
+        document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
+      }}
+      aria-label={`Email ${COPY.contact}`}
+    >
       <span className="ssp-fab__q">Building something…</span>
       <span className="ssp-fab__btn">Say hi</span>
     </a>
@@ -373,7 +380,7 @@ function StarshipSite() {
         </div>
       </div>
 
-      <footer className="ssp-footer" data-screen-label="Footer">
+      <footer className="ssp-footer" id="contact" data-screen-label="Footer">
         <div className="ssp-postcard">
           <h2 className="ssp-postcard__title">Ready to<br/>build <em>something</em>?</h2>
           <p className="ssp-postcard__sub">Send us a note about your project. You'll hear back from the people who'd actually build it.</p>
@@ -381,8 +388,8 @@ function StarshipSite() {
           <a className="ssp-postcard__btn" href={`mailto:${COPY.contact}`}>Send a note</a>
         </div>
         <div className="ssp-postcard__base">
-          <span>© <b>{COPY.brand}</b> · since 2005</span>
-          <span>Worldwide</span>
+          <span>© 2026 <b>{COPY.brand}</b></span>
+          <span>Washington, DC · Worldwide</span>
         </div>
       </footer>
 

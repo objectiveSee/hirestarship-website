@@ -520,10 +520,11 @@ html { scroll-behavior: smooth; }
 .ssp-rp__wordmark {
   display: block;
   width: 100%;
-  max-width: 280px;
-  height: 74px;
+  max-width: 340px;
+  height: 90px;
+  margin-left: -10px;
   object-fit: cover;
-  object-position: center 56%;
+  object-position: left 56%;
 }
 .ssp-rp__sub {
   font-size: 15px;
@@ -1106,8 +1107,8 @@ html { scroll-behavior: smooth; }
   inset: 0;
   z-index: 1;
   background:
-    linear-gradient(180deg, rgba(0,0,0,0.10) 0%, rgba(0,0,0,0.20) 40%, rgba(0,0,0,0.78) 100%),
-    linear-gradient(90deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.10) 55%, rgba(0,0,0,0.0) 100%);
+    linear-gradient(180deg, rgba(0,0,0,0.20) 0%, rgba(0,0,0,0.30) 40%, rgba(0,0,0,0.88) 100%),
+    linear-gradient(90deg, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.20) 55%, rgba(0,0,0,0.10) 100%);
 }
 .ssp-beta-tile__content {
   position: absolute;
@@ -1206,6 +1207,6 @@ html { scroll-behavior: smooth; }
   }
   .ssp-beta-tile__overlay {
     background:
-      linear-gradient(180deg, rgba(0,0,0,0.20) 0%, rgba(0,0,0,0.45) 50%, rgba(0,0,0,0.85) 100%);
+      linear-gradient(180deg, rgba(0,0,0,0.30) 0%, rgba(0,0,0,0.55) 50%, rgba(0,0,0,0.95) 100%);
   }
 }
