@@ -1,4 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
   <rect width="64" height="64" rx="12" fill="#060912"/>
-  <path d="M32 10 L37 25.12 L52.92 25.20 L40.08 34.63 L44.93 49.80 L32 40.5 L19.07 49.80 L23.92 34.63 L11.08 25.20 L27 25.12 Z" fill="#f6f3ec"/>
+  <!-- Big sparkle, center -->
+  <path d="M32 10 L34.83 25.17 L50 28 L34.83 30.83 L32 46 L29.17 30.83 L14 28 L29.17 25.17 Z" fill="#f6f3ec"/>
+  <!-- Small sparkle, upper-left -->
+  <path d="M14 7 L15.27 12.73 L21 14 L15.27 15.27 L14 21 L12.73 15.27 L7 14 L12.73 12.73 Z" fill="#f6f3ec"/>
+  <!-- Tiny sparkle, lower-right -->
+  <path d="M52 44 L53.06 48.94 L58 50 L53.06 51.06 L52 56 L50.94 51.06 L46 50 L50.94 48.94 Z" fill="#f6f3ec"/>
 </svg>

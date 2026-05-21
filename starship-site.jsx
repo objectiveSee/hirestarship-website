@@ -263,7 +263,7 @@ function TimecodeTile() {
    copy and chips sit on top of a dark gradient overlay. Brand vibe is
    stark monochrome aerospace, so this tile is darker and quieter than
    the others on purpose. */
-const BETA_TECH = ["React Native", "Expo", "Real-time", "Live telemetry"];
+const BETA_TECH = ["React Native", "Expo", "Real-time"];
 
 function BetaTile() {
   return (
@@ -323,16 +323,45 @@ const Project = ({ id, label, children }) => (
   </section>
 );
 
-/* ───── Floating contact pill (bottom-right, follows the page) ───────────── */
+/* ───── Floating contact pill (bottom-right, follows the page) ─────────────
+   Hidden while the hero or footer is on screen; fades in once the user is
+   scrolling through the work. Saves the FAB from competing with the hero
+   CTA and the postcard CTA. */
 function ContactFab() {
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const hero = document.querySelector(".ssp-hero");
+    const footer = document.getElementById("contact");
+    if (!hero || !footer) return;
+
+    let heroIn = true;
+    let footerIn = false;
+    const update = () => setVisible(!heroIn && !footerIn);
+
+    const io = new IntersectionObserver((entries) => {
+      for (const e of entries) {
+        if (e.target === hero)   heroIn   = e.isIntersecting;
+        if (e.target === footer) footerIn = e.isIntersecting;
+      }
+      update();
+    }, { threshold: 0.05 });
+
+    io.observe(hero);
+    io.observe(footer);
+    return () => io.disconnect();
+  }, []);
+
   return (
     <a
-      className="ssp-fab"
+      className={`ssp-fab${visible ? " is-visible" : ""}`}
       href={`mailto:${COPY.contact}`}
       onClick={() => {
         document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
       }}
       aria-label={`Email ${COPY.contact}`}
+      aria-hidden={!visible}
+      tabIndex={visible ? 0 : -1}
     >
       <span className="ssp-fab__q">Building something…</span>
       <span className="ssp-fab__btn">Say hi</span>
