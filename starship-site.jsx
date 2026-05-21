@@ -303,7 +303,7 @@ function StarshipSite() {
       <footer className="ssp-footer" data-screen-label="Footer">
         <div className="ssp-postcard">
           <h2 className="ssp-postcard__title">Ready to<br/>build <em>something</em>?</h2>
-          <p className="ssp-postcard__sub">A short note is enough — tell us what you're building. You'll hear back from whoever ends up doing the work, not a sales rep.</p>
+          <p className="ssp-postcard__sub">Send us a note about your project. You'll hear back from the people who'd actually build it.</p>
           <a className="ssp-postcard__email" href={`mailto:${COPY.contact}`}>{COPY.contact}</a>
           <a className="ssp-postcard__btn" href={`mailto:${COPY.contact}`}>Send a note</a>
         </div>
