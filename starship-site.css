@@ -17,7 +17,7 @@ html, body { margin: 0; padding: 0; background: var(--ssp-paper); color: var(--s
 html { scroll-behavior: smooth; }
 
 .ssp-page {
-  max-width: 1480px;
+  max-width: 2000px;
   margin: 0 auto;
   padding: 0;
 }
@@ -45,7 +45,7 @@ html { scroll-behavior: smooth; }
   height: 100%; box-sizing: border-box;
   padding: 36px 56px 56px;
   display: flex; flex-direction: column;
-  max-width: 1480px;
+  max-width: 2000px;
   margin: 0 auto;
 }
 
