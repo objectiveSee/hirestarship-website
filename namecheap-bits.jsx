@@ -87,57 +87,32 @@ const AuctionFeed = ({ count = 8, interval = 1100, density = "comfortable", styl
   );
 };
 
-/* ─── Store buttons ────────────────────────────────────────────────────────
-   Placeholders shaped like the standard Apple App Store / Google Play badges
-   (black pill, small caption + big platform name). Glyphs are intentionally
-   generic — the OFFICIAL badge PNGs from Apple/Google should drop in here
-   before this goes anywhere public. */
-const PlaceholderGlyph = ({ shape }) => (
-  <svg viewBox="0 0 28 28" width="26" height="26" aria-hidden="true">
-    {shape === "ios" ? (
-      // Generic rounded-square placeholder
-      <>
-        <rect x="4" y="4" width="20" height="20" rx="5" ry="5" fill="none" stroke="currentColor" strokeWidth="1.6" />
-        <line x1="9" y1="14" x2="19" y2="14" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
-        <line x1="14" y1="9" x2="14" y2="19" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
-      </>
-    ) : (
-      // Generic right-triangle placeholder
-      <polygon points="8,5 8,23 22,14" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
-    )}
-  </svg>
-);
-
-const StoreButton = ({ platform, label, sublabel, href, size = "md" }) => (
+/* ─── Store buttons — use the official Apple / Google badge images. ──── */
+const StoreBadge = ({ platform, href, label, src }) => (
   <a
-    href={href || "#"}
-    className={`nc-storebtn nc-storebtn--${size} nc-storebtn--${platform}`}
+    href={href}
+    className={`nc-storebadge nc-storebadge--${platform}`}
     target="_blank"
     rel="noopener noreferrer"
+    aria-label={label}
   >
-    <span className="nc-storebtn__icon"><PlaceholderGlyph shape={platform} /></span>
-    <span className="nc-storebtn__text">
-      <span className="nc-storebtn__small">{sublabel}</span>
-      <span className="nc-storebtn__big">{label}</span>
-    </span>
+    <img src={src} alt={label} />
   </a>
 );
 
-const StoreButtonRow = ({ size = "md" }) => (
+const StoreButtonRow = () => (
   <div className="nc-storerow">
-    <StoreButton
+    <StoreBadge
       platform="ios"
-      sublabel="Download on the"
-      label="App Store"
-      size={size}
       href="https://apps.apple.com/us/app/namecheap-auctions/id6743634772"
+      label="Download on the App Store"
+      src="assets/badges/appstore-white.svg"
     />
-    <StoreButton
+    <StoreBadge
       platform="android"
-      sublabel="GET IT ON"
-      label="Google Play"
-      size={size}
       href="https://play.google.com/store/apps/details?id=marketplace.com.namecheap"
+      label="Get it on Google Play"
+      src="assets/badges/googleplay-trimmed.png"
     />
   </div>
 );
@@ -221,10 +196,10 @@ const NCScreenPager = ({ srcs = NC_SCREENS, interval = 8000, className = "" }) =
 const NCScopeCopy = ({ compact = false }) => (
   <>
     <NamecheapMark height={compact ? 26 : 34} />
-    <div className="nc-tile__kicker">Native iOS + Android · v1 · 2025</div>
     <div className={`nc-tile__name${compact ? " nc-tile__name--compact" : ""}`}>
       Namecheap<br/>Auctions
     </div>
+    <div className="nc-tile__kicker">React Native · iOS · Android</div>
     <div className="nc-tile__desc">
       Owned v1 of Namecheap's mobile app for the domain marketplace, end&#8209;to&#8209;end —
       architecture, screens, auth, bidding, and ship. Built in React Native + Expo.
@@ -232,7 +207,7 @@ const NCScopeCopy = ({ compact = false }) => (
       Dynamic Island in real time. Released on the App Store and Google Play.
     </div>
     <TechRow items={NC_TECH} />
-    <StoreButtonRow size={compact ? "sm" : "md"} />
+    <StoreButtonRow />
   </>
 );
 
@@ -273,7 +248,6 @@ const NCTile_Mobile = ({ feedSpeed = 1100, pageInterval = 8000 }) => (
 
 window.NC = {
   AuctionFeed,
-  StoreButton,
   StoreButtonRow,
   NCScreenPager,
   NCTile_Split,

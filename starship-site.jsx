@@ -41,7 +41,7 @@ function Hero() {
           <h1 className="ssp-hero__title">Software<br/>that holds up.</h1>
           <p className="ssp-hero__intro">Mobile, web, and AI for a handful of clients we know well.</p>
           <div className="ssp-hero__ctas">
-            <span className="pri">See the work</span>
+            <a className="pri" href="#radio-paradise">See the work</a>
             <span className="sec">{COPY.contact}</span>
           </div>
         </div>
@@ -57,22 +57,18 @@ function Expertise() {
     <section className="ssp-expertise" data-screen-label="Expertise">
       <div className="ssp-expertise__grid">
         <div className="ssp-expertise__col">
-          <span className="ssp-expertise__num">01</span>
           <div className="ssp-expertise__big">Mobile</div>
           <div className="ssp-expertise__sub">React Native &amp; Expo. Native iOS and Android from one codebase. Live Activities, real-time, audio.</div>
         </div>
         <div className="ssp-expertise__col">
-          <span className="ssp-expertise__num">02</span>
           <div className="ssp-expertise__big">Web</div>
           <div className="ssp-expertise__sub">React, Next.js, TypeScript. Marketing sites and production web apps, front-end first.</div>
         </div>
         <div className="ssp-expertise__col">
-          <span className="ssp-expertise__num">03</span>
           <div className="ssp-expertise__big">Design</div>
           <div className="ssp-expertise__sub">Flows, screens, brand systems. Product design that ships alongside the engineering, not before it.</div>
         </div>
         <div className="ssp-expertise__col">
-          <span className="ssp-expertise__num">04</span>
           <div className="ssp-expertise__big">AI</div>
           <div className="ssp-expertise__sub">Practical AI consulting — evals, RAG, agents, fine-tuning. We help teams ship features that actually work in production.</div>
         </div>
@@ -130,15 +126,11 @@ function RadioParadiseTile() {
           <div className="ssp-rp__live">On Air</div>
           <div className="ssp-rp__body">
             <img className="ssp-rp__wordmark" src={_A('rpLogo', 'assets/radio-paradise-logo.png')} alt="Radio Paradise — Human Curated Radio" />
-            <div className="ssp-rp__sub">Hand-picked, ad-free, lossless internet radio. On iOS now — Android coming.</div>
+            <div className="ssp-rp__sub">Hand-picked by human DJs. Ad-free, lossless internet radio — the way it should be.</div>
             <div className="ssp-rp__stores">
               <a className="ssp-rp__badge" href="https://apps.apple.com/us/app/radio-paradise/id517818306" target="_blank" rel="noopener" aria-label="Download on the App Store">
                 <img src={APPSTORE_BADGE} alt="Download on the App Store" />
               </a>
-              <span className="ssp-rp__badge ssp-rp__badge--soon" aria-label="Google Play — coming soon">
-                <img src={GOOGLEPLAY_BADGE} alt="" />
-                <span className="ssp-rp__badge-tag">Coming soon</span>
-              </span>
             </div>
             <ProjectChips client={RADIO_PARADISE} variant="inline" />
           </div>
@@ -216,11 +208,9 @@ function TimecodeTile() {
         <div className="ssp-tc__left">
           <a className="ssp-tc__head" href="https://timecodeplus.com" target="_blank" rel="noopener" aria-label="Visit timecodeplus.com">
             <img className="ssp-tc__icon" src={_A("tcAppIcon", "assets/timecode/app-icon.png")} alt="" />
-            <div className="ssp-tc__heading">
-              <div className="ssp-tc__kicker">iOS · Web</div>
-              <div className="ssp-tc__name">Timecode+</div>
-            </div>
+            <div className="ssp-tc__name">Timecode+</div>
           </a>
+          <div className="ssp-tc__kicker">iOS · Web · Swift</div>
           <div className="ssp-tc__clock" aria-label={`Live timecode ${tc.h}:${tc.m}:${tc.s}:${tc.f}`}>
             <span className="tc-seg tc-seg-1">{tc.h}</span>
             <span className="tc-colon tc-seg-1">:</span>
@@ -303,7 +293,7 @@ function StarshipSite() {
           {/* 3 · Namecheap Auctions — tile already shows its tech stack
               internally (via TechRow), so no overlay chips needed. */}
           <Project id="namecheap" label="Namecheap Auctions">
-            <div className="ssp-tile" style={{ aspectRatio: "16 / 9" }}>
+            <div className="ssp-tile ssp-tile--nc">
               <NCTile_Split feedSpeed={1100} pageInterval={8000} />
             </div>
           </Project>
@@ -312,22 +302,14 @@ function StarshipSite() {
 
       <footer className="ssp-footer" data-screen-label="Footer">
         <div className="ssp-postcard">
-          <div className="ssp-postcard__left">
-            <span className="ssp-postcard__stamp">↳ Contact us</span>
-            <h2 className="ssp-postcard__title">Ready to<br/>build <em>something</em>?</h2>
-            <p className="ssp-postcard__sub">A paragraph is plenty. We pick projects carefully, and the people who reply are the people who do the work.</p>
-          </div>
-          <div className="ssp-postcard__right">
-            <div>
-              <span className="ssp-postcard__email-label">Write to</span>
-              <a className="ssp-postcard__email" href={`mailto:${COPY.contact}`}>{COPY.contact}</a>
-            </div>
-            <a className="ssp-postcard__btn" href={`mailto:${COPY.contact}`}>Send a note</a>
-          </div>
+          <h2 className="ssp-postcard__title">Ready to<br/>build <em>something</em>?</h2>
+          <p className="ssp-postcard__sub">A short note is enough — tell us what you're building. You'll hear back from whoever ends up doing the work, not a sales rep.</p>
+          <a className="ssp-postcard__email" href={`mailto:${COPY.contact}`}>{COPY.contact}</a>
+          <a className="ssp-postcard__btn" href={`mailto:${COPY.contact}`}>Send a note</a>
         </div>
         <div className="ssp-postcard__base">
           <span>© <b>{COPY.brand}</b> · since 2005</span>
-          <span>Brooklyn &nbsp;·&nbsp; remote-friendly</span>
+          <span>Worldwide</span>
         </div>
       </footer>
     </div>

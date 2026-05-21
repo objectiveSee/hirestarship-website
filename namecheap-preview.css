@@ -356,69 +356,51 @@
   transform: scale(1.25);
 }
 
-/* ── Store buttons ───────────────────────────────────────────────────────
-   Standard Apple/Google badge shape — black pill, 2-line text, ~140-160px
-   wide. PLACEHOLDER glyphs; swap for official PNGs before ship. */
+/* ── Store badges — official Apple / Google images. ───────────────────── */
 .nc-storerow {
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
   margin-top: 6px;
 }
-.nc-storebtn {
+.nc-storebadge {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  padding: 8px 14px 9px;
-  border-radius: 10px;
-  background: #000;
-  color: #fff;
+  height: 44px;
   text-decoration: none;
-  border: 1px solid rgba(255,255,255,0.22);
-  font-family: "Inter", var(--sans);
-  transition: transform 160ms ease-out, background 160ms ease-out, border-color 160ms ease-out;
-  cursor: pointer;
+  transition: transform 160ms ease-out;
 }
-.nc-storebtn:hover {
-  transform: translateY(-1px);
-  border-color: rgba(255,255,255,0.40);
+.nc-storebadge img {
+  height: 100%;
+  width: auto;
+  display: block;
 }
-.nc-storebtn--sm {
-  padding: 7px 12px 8px;
-  border-radius: 9px;
+.nc-storebadge:hover { transform: translateY(-1px); }
+
+/* ── Wrapper aspect ratio — desktop only. On mobile the tile is
+   content-sized since the feed and phone columns are hidden. ─────────── */
+.ssp-tile--nc { aspect-ratio: 16 / 9; }
+@media (max-width: 900px) {
+  .ssp-tile--nc { aspect-ratio: auto; }
 }
-.nc-storebtn__icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 28px;
-  flex: 0 0 28px;
-  color: #fff;
+
+/* ── Mobile: collapse to copy-only. Hide the live feed and phone
+   columns — they don't survive being squeezed into a narrow viewport,
+   and the store buttons get the user to the real app. ────────────────── */
+@media (max-width: 900px) {
+  .nc-tile--split {
+    grid-template-columns: 1fr;
+    padding: 36px 24px 40px;
+    gap: 0;
+  }
+  .nc-tile--split .nc-tile__col--feed,
+  .nc-tile--split .nc-tile__col--phone {
+    display: none;
+  }
+  .nc-tile--split .nc-tile__col--copy {
+    padding-right: 0;
+    gap: 14px;
+  }
+  .nc-tile__name { font-size: 44px; }
+  .nc-tile__desc { font-size: 14.5px; max-width: none; }
 }
-.nc-storebtn--sm .nc-storebtn__icon {
-  width: 24px;
-  flex: 0 0 24px;
-}
-.nc-storebtn__icon svg { display: block; }
-.nc-storebtn__text {
-  display: flex;
-  flex-direction: column;
-  line-height: 1.1;
-  text-align: left;
-  min-width: 0;
-}
-.nc-storebtn__small {
-  font-size: 9.5px;
-  letter-spacing: 0.04em;
-  opacity: 0.85;
-  font-family: "Inter", var(--sans);
-}
-.nc-storebtn__big {
-  font-size: 17px;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-  margin-top: 2px;
-  font-family: "Inter", var(--sans);
-}
-.nc-storebtn--sm .nc-storebtn__big { font-size: 14px; }
-.nc-storebtn--sm .nc-storebtn__small { font-size: 8.5px; }
