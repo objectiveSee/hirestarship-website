@@ -34,7 +34,13 @@ function Hero() {
       <div className="ssp-hero__content">
         <nav className="ssp-nav">
           <div className="ssp-nav__brand">Starship Studios</div>
-          <a className="ssp-nav__cta" href={`mailto:${COPY.contact}`}>Say hi →</a>
+          <a
+            className="ssp-nav__cta"
+            href={`mailto:${COPY.contact}`}
+            onClick={() => {
+              document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
+            }}
+          >Say hi →</a>
         </nav>
         <div className="ssp-hero__body">
           <h1 className="ssp-hero__title">Software<br/>that holds up.</h1>
