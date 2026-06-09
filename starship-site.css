@@ -11,6 +11,8 @@
   --ssp-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
   --ssp-sans: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
   --ssp-live: #ff4d4d;
+  --ssp-accent: #345a86;       /* calm slate-blue, softer than electric */
+  --ssp-accent-deep: #284868;  /* darker hover state */
 }
 
 html, body { margin: 0; padding: 0; background: var(--ssp-paper); color: var(--ssp-ink); font-family: var(--ssp-sans); overflow-x: clip; }
@@ -43,7 +45,7 @@ html { scroll-behavior: smooth; }
 .ssp-hero__content {
   position: relative; z-index: 1;
   height: 100%; box-sizing: border-box;
-  padding: 36px 56px 56px;
+  padding: 36px 56px 72px;
   display: flex; flex-direction: column;
   max-width: 2000px;
   margin: 0 auto;
@@ -93,8 +95,10 @@ html { scroll-behavior: smooth; }
 .ssp-hero__title {
   font-family: var(--ssp-sans);
   font-weight: 800;
-  font-size: 96px;
-  line-height: 0.94;
+  /* Fluid: shrinks with viewport so it never crowds the edges on
+     mid-width windows, caps out on very wide screens. */
+  font-size: clamp(44px, 5vw, 82px);
+  line-height: 0.96;
   letter-spacing: -0.025em;
   margin: 18px 0 0;
 }
@@ -690,11 +694,58 @@ html { scroll-behavior: smooth; }
   transition: opacity 160ms ease;
 }
 .ssp-postcard__email:hover { opacity: 0.7; }
+.ssp-postcard__emailrow {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.ssp-postcard__emailrow .ssp-postcard__email { margin-top: 0; }
+.ssp-copy {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  color: var(--ssp-accent);
+  border: 1.4px solid var(--ssp-accent);
+  border-radius: 999px;
+  padding: 7px 16px;
+  cursor: pointer;
+  font-family: var(--ssp-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  line-height: 1;
+  transition: background 160ms ease, color 160ms ease, transform 160ms ease;
+}
+.ssp-copy::before {
+  content: "";
+  width: 10px; height: 10px;
+  border: 1.4px solid currentColor;
+  border-radius: 2px;
+  box-shadow: 3px -3px 0 -1.4px currentColor;
+}
+.ssp-copy:hover { background: var(--ssp-accent); color: #fff; transform: translateY(-1px); }
+.ssp-copy.is-copied {
+  background: var(--ssp-accent);
+  color: #fff;
+  border-color: var(--ssp-accent);
+}
+.ssp-copy.is-copied::before {
+  width: 12px; height: 7px;
+  border: none;
+  border-left: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  border-radius: 0;
+  box-shadow: none;
+  transform: rotate(-45deg) translate(1px, -2px);
+}
 .ssp-postcard__btn {
   display: inline-flex;
   align-items: center; gap: 12px;
-  background: var(--ssp-ink);
-  color: var(--ssp-paper);
+  background: var(--ssp-accent);
+  color: #fff;
   text-decoration: none;
   padding: 14px 22px;
   border-radius: 999px;
@@ -702,10 +753,39 @@ html { scroll-behavior: smooth; }
   font-size: 12px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  transition: transform 160ms ease;
+  transition: transform 160ms ease, background 160ms ease;
 }
-.ssp-postcard__btn:hover { transform: translateY(-1px); }
+.ssp-postcard__btn:hover { transform: translateY(-1px); background: var(--ssp-accent-deep); }
 .ssp-postcard__btn::after { content: "\2192"; font-size: 14px; }
+
+.ssp-postcard__actions {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+/* Secondary CTA — quieter than "Send a note", with a small
+   LinkedIn glyph. Text link feel, not a heavy second button. */
+.ssp-linkedin {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--ssp-accent);
+  text-decoration: none;
+  font-family: var(--ssp-mono);
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  transition: color 160ms ease;
+}
+.ssp-linkedin__icon {
+  width: 15px;
+  height: 15px;
+  display: block;
+  flex: none;
+}
+.ssp-linkedin:hover { color: var(--ssp-accent-deep); }
+.ssp-linkedin:hover span { text-decoration: underline; text-underline-offset: 3px; }
 .ssp-postcard__base {
   margin: 32px auto 0;
   max-width: 1180px;
@@ -716,6 +796,12 @@ html { scroll-behavior: smooth; }
   letter-spacing: 0.10em;
 }
 .ssp-postcard__base b { color: var(--ssp-ink); font-weight: 600; }
+.ssp-postcard__social {
+  color: var(--ssp-accent);
+  text-decoration: none;
+  transition: opacity 160ms ease;
+}
+.ssp-postcard__social:hover { opacity: 0.7; }
 
 /* ============================================================
    Final tweak: kill the leftover wireframe meta strip if it
@@ -726,6 +812,25 @@ html { scroll-behavior: smooth; }
 .ssp-page .nc-tile { border-radius: 0; }
 
 /* ============================================================
+   TABLET — Hero (701–1024px). Drop the fixed 16:8.5 aspect ratio
+   and let the hero shrink-wrap its content (no forced height →
+   no dead space). Content-driven height with comfortable padding.
+   ============================================================ */
+@media (min-width: 701px) and (max-width: 1024px) {
+  .ssp-hero {
+    aspect-ratio: auto;
+  }
+  .ssp-hero__content {
+    padding: 32px 40px 52px;
+  }
+  .ssp-hero__body {
+    /* Fixed gap below the nav instead of margin-top:auto, which
+       only works when the container has a forced height. */
+    margin-top: 72px;
+  }
+}
+
+/* ============================================================
    MOBILE — Hero (matches M6 · Image-led from mobile-variations).
    Triggers ≤700px. Other sections still need their own mobile
    passes; this block scopes only to .ssp-hero.
@@ -733,10 +838,9 @@ html { scroll-behavior: smooth; }
 @media (max-width: 700px) {
   .ssp-hero {
     aspect-ratio: auto;
-    min-height: 560px;
   }
   .ssp-hero__content {
-    padding: 18px 18px 28px;
+    padding: 18px 20px 36px;
   }
   .ssp-nav {
     padding-bottom: 14px;
@@ -752,8 +856,9 @@ html { scroll-behavior: smooth; }
   }
 
   .ssp-hero__body {
-    margin-top: auto;
-    padding-top: 80px;
+    /* Content-driven height — fixed gap below the nav, no
+       margin-top:auto/min-height pairing (that left dead space). */
+    margin-top: 56px;
     max-width: none;
   }
   .ssp-hero__kicker {

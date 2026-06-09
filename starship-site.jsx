@@ -67,7 +67,7 @@ function Expertise() {
         </div>
         <div className="ssp-expertise__col">
           <div className="ssp-expertise__big">Web</div>
-          <div className="ssp-expertise__sub">React, Next.js, TypeScript. Marketing sites and production web apps, front-end first.</div>
+          <div className="ssp-expertise__sub">React, TypeScript, Tailwind. Marketing sites and production web apps, front-end first.</div>
         </div>
         <div className="ssp-expertise__col">
           <div className="ssp-expertise__big">Design</div>
@@ -268,7 +268,7 @@ function TimecodeTile() {
    copy and chips sit on top of a dark gradient overlay. Brand vibe is
    stark monochrome aerospace, so this tile is darker and quieter than
    the others on purpose. */
-const BETA_TECH = ["React Native", "Expo", "Real-time"];
+const BETA_TECH = ["React Native", "Expo", "WebSockets"];
 
 function BetaTile() {
   return (
@@ -374,6 +374,50 @@ function ContactFab() {
   );
 }
 
+/* ───── Email + copy-to-clipboard ─────────────────────────────────────────
+   The whole point of the site is to get people to email us, so make the
+   address one tap to grab. Email stays a mailto: link; the button copies it
+   to the clipboard and flips to a "Copied" confirmation for a beat. */
+function EmailWithCopy() {
+  const [copied, setCopied] = useState(false);
+  const timer = useRef(null);
+
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(COPY.contact);
+    } catch {
+      // Fallback for older/insecure contexts (no async clipboard API).
+      const ta = document.createElement("textarea");
+      ta.value = COPY.contact;
+      ta.style.position = "fixed";
+      ta.style.opacity = "0";
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand("copy"); } catch {}
+      document.body.removeChild(ta);
+    }
+    setCopied(true);
+    clearTimeout(timer.current);
+    timer.current = setTimeout(() => setCopied(false), 2000);
+  };
+
+  useEffect(() => () => clearTimeout(timer.current), []);
+
+  return (
+    <div className="ssp-postcard__emailrow">
+      <a className="ssp-postcard__email" href={`mailto:${COPY.contact}`}>{COPY.contact}</a>
+      <button
+        type="button"
+        className={`ssp-copy${copied ? " is-copied" : ""}`}
+        onClick={copy}
+        aria-label={copied ? "Email address copied" : `Copy ${COPY.contact} to clipboard`}
+      >
+        <span className="ssp-copy__label">{copied ? "Copied" : "Copy"}</span>
+      </button>
+    </div>
+  );
+}
+
 /* ───── Page ─────────────────────────────────────────────────────────────── */
 function StarshipSite() {
   useEffect(() => {
@@ -418,8 +462,22 @@ function StarshipSite() {
         <div className="ssp-postcard">
           <h2 className="ssp-postcard__title">Ready to<br/>build <em>something</em>?</h2>
           <p className="ssp-postcard__sub">Send us a note about your project. You'll hear back from the people who'd actually build it.</p>
-          <a className="ssp-postcard__email" href={`mailto:${COPY.contact}`}>{COPY.contact}</a>
-          <a className="ssp-postcard__btn" href={`mailto:${COPY.contact}`}>Send a note</a>
+          <EmailWithCopy />
+          <div className="ssp-postcard__actions">
+            <a className="ssp-postcard__btn" href={`mailto:${COPY.contact}`}>Send a note</a>
+            <a
+              className="ssp-linkedin"
+              href="https://www.linkedin.com/in/dannyricciotti/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Connect with Danny Ricciotti on LinkedIn"
+            >
+              <svg className="ssp-linkedin__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path fill="currentColor" d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.07 2.07 0 1 1 0-4.14 2.07 2.07 0 0 1 0 4.14zM7.12 20.45H3.55V9h3.57v11.45zM22.22 0H1.77C.8 0 0 .78 0 1.74v20.52C0 23.22.8 24 1.77 24h20.45c.98 0 1.78-.78 1.78-1.74V1.74C24 .78 23.2 0 22.22 0z"/>
+              </svg>
+              <span>Connect on LinkedIn</span>
+            </a>
+          </div>
         </div>
         <div className="ssp-postcard__base">
           <span>© 2026 <b>{COPY.brand}</b></span>
