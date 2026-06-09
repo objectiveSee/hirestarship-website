@@ -669,9 +669,18 @@ html { scroll-behavior: smooth; }
   margin: 0;
 }
 .ssp-postcard__title em {
-  font-style: italic;
+  font-style: normal;
   font-weight: 800;
-  color: var(--ssp-ink-soft);
+  background: linear-gradient(100deg, var(--ssp-accent) 0%, #5b8fc7 55%, #7fb0e0 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  /* Tight title line-height crops the gradient paint box at the
+     descenders ("g"); extend it down without shifting layout. */
+  padding-bottom: 0.16em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
 }
 .ssp-postcard__sub {
   margin: 0;
