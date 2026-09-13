@@ -114,10 +114,12 @@ const APPSTORE_BADGE = "assets/badges/appstore-white.svg";
 const GOOGLEPLAY_BADGE = "assets/badges/googleplay.png";
 
 /* ───── Radio Paradise — bespoke hero3 tile with three phones ────────────── */
+// 800px-wide WebP (the PNG originals are 1170×2532 and ~2 MB each; the
+// phones render at well under 400 CSS px).
 const RP_SHOTS = [
-  { id: 'rpShotRight',  fallback: 'assets/radio-paradise-screenshot-right.png',  alt: 'Radio Paradise — Lyrics' },
-  { id: 'rpShotCenter', fallback: 'assets/radio-paradise-screenshot-center.png', alt: 'Radio Paradise — Mixes home' },
-  { id: 'rpShotLeft',   fallback: 'assets/radio-paradise-screenshot-left.png',   alt: 'Radio Paradise — Now playing' },
+  { id: 'rpShotRight',  fallback: 'assets/radio-paradise-screenshot-right.webp',  alt: 'Radio Paradise — Lyrics' },
+  { id: 'rpShotCenter', fallback: 'assets/radio-paradise-screenshot-center.webp', alt: 'Radio Paradise — Mixes home' },
+  { id: 'rpShotLeft',   fallback: 'assets/radio-paradise-screenshot-left.webp',   alt: 'Radio Paradise — Now playing' },
 ];
 
 function RadioParadiseTile() {
@@ -157,7 +159,7 @@ function RadioParadiseTile() {
         </div>
         <div className="ssp-rp__shots" data-active-shot={activeShot}>
           {RP_SHOTS.map(s => (
-            <div className="ssp-rp-phone" key={s.id}><img src={_A(s.id, s.fallback)} alt={s.alt} width={1170} height={2532} decoding="async" /></div>
+            <div className="ssp-rp-phone" key={s.id}><img src={_A(s.id, s.fallback)} alt={s.alt} width={800} height={1731} decoding="async" /></div>
           ))}
         </div>
         <div className="ssp-rp__shots-nav" aria-label="Screenshot carousel">
@@ -208,11 +210,12 @@ function useTimecode() {
 }
 
 /* ───── Timecode+ — bespoke tile with live clock + screenshot carousel ──── */
+// 800px-wide WebP versions of the App Store screenshots (see RP_SHOTS).
 const TC_SHOTS = [
-  { id: "tcMarkerList", fallback: "assets/timecode/marker-list.png", alt: "Timecode+ — marker list",                        w: 1206, h: 2622 },
-  { id: "tcExport",     fallback: "assets/timecode/export.png",      alt: "Timecode+ — export to NLEs",                     w: 1206, h: 2622 },
-  { id: "tcNewNote",    fallback: "assets/timecode/new-note.png",    alt: "Timecode+ — new note",                           w: 1206, h: 2622 },
-  { id: "tcDictation",  fallback: "assets/timecode/dictation.png",   alt: "Timecode+ — live dictation while recording",     w: 1170, h: 2532 },
+  { id: "tcMarkerList", fallback: "assets/timecode/marker-list.webp", alt: "Timecode+ — marker list",                        w: 800, h: 1739 },
+  { id: "tcExport",     fallback: "assets/timecode/export.webp",      alt: "Timecode+ — export to NLEs",                     w: 800, h: 1739 },
+  { id: "tcNewNote",    fallback: "assets/timecode/new-note.webp",    alt: "Timecode+ — new note",                           w: 800, h: 1739 },
+  { id: "tcDictation",  fallback: "assets/timecode/dictation.webp",   alt: "Timecode+ — live dictation while recording",     w: 800, h: 1731 },
 ];
 
 function TimecodeTile() {
@@ -227,7 +230,7 @@ function TimecodeTile() {
       <div className="ssp-tc-tile__content">
         <div className="ssp-tc__left">
           <a className="ssp-tc__head" href="https://timecodeplus.com" target="_blank" rel="noopener" aria-label="Visit timecodeplus.com">
-            <img className="ssp-tc__icon" src={_A("tcAppIcon", "assets/timecode/app-icon.png")} alt="" width={56} height={56} loading="lazy" decoding="async" />
+            <img className="ssp-tc__icon" src={_A("tcAppIcon", "assets/timecode/app-icon.webp")} alt="" width={56} height={56} loading="lazy" decoding="async" />
             <h3 className="ssp-tc__name">Timecode+</h3>
           </a>
           <div className="ssp-tc__kicker">iOS · Web · Swift</div>
@@ -453,8 +456,9 @@ function StarshipSite() {
 
   return (
     <div className="ssp-page" data-screen-label="Starship Studios">
+      <a className="ssp-skip" href="#main">Skip to content</a>
       <Hero />
-      <main>
+      <main id="main">
       <Expertise />
 
       <section id="work" aria-labelledby="work-title">

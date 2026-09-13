@@ -5,7 +5,7 @@
   "description": "hirestarship.com — static site, no build step. devDependencies exist only for scripts/prerender.mjs (run by CI).",
   "scripts": {
     "prerender": "node scripts/prerender.mjs",
-    "build": "rm -rf _site && rsync -a --exclude .git --exclude .github --exclude .claude --exclude node_modules --exclude _site --exclude scripts --exclude 'package*.json' --exclude CLAUDE.md --exclude README.md --exclude .gitignore --exclude .DS_Store ./ _site/ && node scripts/prerender.mjs --out _site/index.html"
+    "build": "rm -rf _site && rsync -a --exclude .git --exclude .github --exclude .claude --exclude node_modules --exclude _site --exclude scripts --exclude 'package*.json' --exclude CLAUDE.md --exclude README.md --exclude .gitignore --exclude .DS_Store --exclude '*.jsx' ./ _site/ && node scripts/prerender.mjs --out _site/index.html"
   },
   "devDependencies": {
     "@babel/core": "^7.29.0",

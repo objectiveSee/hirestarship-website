@@ -35,6 +35,8 @@ globalThis.ReactDOM = {
   hydrateRoot: (_container, el) => { rendered = el; },
 };
 
+fs.mkdirSync(path.dirname(OUT), { recursive: true });
+
 for (const file of JSX_FILES) {
   const src = fs.readFileSync(path.join(ROOT, file), "utf8");
   const { code } = transformSync(src, {
@@ -44,8 +46,12 @@ for (const file of JSX_FILES) {
     presets: [["@babel/preset-react", { runtime: "classic" }]],
   });
   // Babel-standalone runs each script tag in its own function scope, which is
-  // why the files can each declare `const _A`. Mirror that here.
-  new Function(code)();
+  // why the files can each declare `const _A`. Mirror that here, and ship the
+  // same wrapper as a plain .js next to the output so the deployed page
+  // doesn't need the 3 MB in-browser Babel at all.
+  const wrapped = `(function () {\n${code}\n})();\n`;
+  new Function(wrapped)();
+  fs.writeFileSync(path.join(path.dirname(OUT), file.replace(/\.jsx$/, ".js")), wrapped);
 }
 if (!rendered) throw new Error("starship-site.jsx never called ReactDOM.createRoot / hydrateRoot");
 
@@ -59,6 +65,11 @@ const MARK = '<div id="root"></div>';
 const index = fs.readFileSync(path.join(ROOT, "index.html"), "utf8");
 if (!index.includes(MARK)) throw new Error(`index.html has no ${MARK} to fill`);
 
-fs.mkdirSync(path.dirname(OUT), { recursive: true });
-fs.writeFileSync(OUT, index.replace(MARK, `<div id="root">${html}</div>`));
-console.log(`prerendered ${(html.length / 1024).toFixed(1)} KB of markup → ${path.relative(ROOT, OUT)}`);
+// Deployed page: precompiled .js instead of text/babel .jsx, and no Babel CDN tag.
+let out = index.replace(MARK, `<div id="root">${html}</div>`);
+out = out.replace(/<script type="text\/babel" src="([^"]+)\.jsx"><\/script>/g, '<script src="$1.js"></script>');
+out = out.replace(/\s*<script src="https:\/\/unpkg\.com\/@babel\/standalone[^>]*><\/script>/, "");
+if (out.includes("text/babel") || out.includes("@babel/standalone")) throw new Error("Babel tags survived the rewrite");
+
+fs.writeFileSync(OUT, out);
+console.log(`prerendered ${(html.length / 1024).toFixed(1)} KB of markup + compiled ${JSX_FILES.length} scripts → ${path.relative(ROOT, path.dirname(OUT))}/`);

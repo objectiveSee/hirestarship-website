@@ -35,6 +35,8 @@ jobs:
       - name: Sanity-check prerendered output
         run: |
           grep -q 'hello@hirestarship.com' _site/index.html
+          test -f _site/starship-site.js && test -f _site/vendor/react-dom.production.min.js
+          ! grep -q 'text/babel' _site/index.html
           test -f _site/robots.txt && test -f _site/sitemap.xml && test -f _site/CNAME && test -f _site/.nojekyll
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3

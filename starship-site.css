@@ -201,6 +201,25 @@ html { scroll-behavior: smooth; }
   .ssp-hero__scrollcue { display: none; }
 }
 
+/* Keyboard skip link — off-screen until focused, then a pill at top-left. */
+.ssp-skip {
+  position: absolute;
+  top: 12px; left: 12px;
+  z-index: 100;
+  transform: translateY(-200%);
+  background: var(--ssp-paper);
+  color: var(--ssp-ink);
+  padding: 10px 16px;
+  border-radius: 999px;
+  font-family: var(--ssp-mono);
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: transform 120ms ease;
+}
+.ssp-skip:focus { transform: none; outline: 2px solid var(--ssp-accent); outline-offset: 2px; }
+
 /* Visually-hidden but available to screen readers and crawlers. */
 .ssp-sr-only {
   position: absolute !important;

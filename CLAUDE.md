@@ -9,8 +9,10 @@ Plain static site. **No build step for local dev.** `index.html` loads React 18 
 The one deploy-time step is **pre-rendering for crawlers**: CI runs `npm run build`, which rsyncs the site into `_site/` and runs `scripts/prerender.mjs` to fill `<div id="root">` with server-rendered HTML (bots without JS — Bing, LinkedIn, most AI crawlers — otherwise see an empty page). The browser then `hydrateRoot`s onto that markup; the raw dev page (empty `#root`) takes the plain `createRoot` path. Consequences:
 - First render must be deterministic (no `Math.random()`/`Date` in initial state — see the seeded feed in `namecheap-bits.jsx`). Effects are fine; they don't run on the server.
 - Top-level code in the `.jsx` files can touch `window.__resources` and `document.getElementById("root")` only; anything else browser-only goes in an effect.
+- The build also **precompiles the `.jsx` to plain `.js`** (IIFE-wrapped, same scoping as Babel-standalone gives each script tag) and rewrites the script tags, so the deployed page never loads the 3 MB in-browser Babel. Babel standalone is still in `index.html` for local dev only.
 - `npm install && npm run build` reproduces the deploy locally; serve `_site/` to check it. `_site/` and `node_modules/` are gitignored.
-- React ships as the **production** builds with SRI hashes in `index.html`. Swap to the `.development.js` files (and drop the `integrity` attrs) temporarily if you need hydration warnings.
+- React 18.3.1 production builds are **self-hosted** in `vendor/` (no CDN dependency). Point the two script tags at unpkg's `.development.js` files temporarily if you need hydration warnings.
+- **Images:** tiles use 800px-wide WebP screenshots (`assets/**/*.webp`); the PNG originals stay in the repo for re-export but aren't referenced by the page. New screenshots: `magick in.png -resize 800x -quality 85 out.webp`, and set `width`/`height` on the `<img>`.
 
 ```
 index.html               entry; meta/OG/JSON-LD, loads CDN React/Babel + all jsx/css/js
