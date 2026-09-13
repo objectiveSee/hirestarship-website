@@ -115,7 +115,10 @@
 </head>
 <body>
   <!-- At deploy time scripts/prerender.mjs fills this div with the rendered
-       page so crawlers without JS see real content; React hydrates on top. -->
+       page so crawlers without JS see real content; React hydrates on top.
+       It wraps the markup in <!--email_off--> so Cloudflare's email
+       obfuscation leaves hello@ readable (turn that feature off in Cloudflare
+       → Scrape Shield too; it hides the address from bots). -->
   <div id="root"></div>
 
   <!-- WebGL shaders for the hero + Radio Paradise tile -->

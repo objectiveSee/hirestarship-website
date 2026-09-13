@@ -66,7 +66,10 @@ const index = fs.readFileSync(path.join(ROOT, "index.html"), "utf8");
 if (!index.includes(MARK)) throw new Error(`index.html has no ${MARK} to fill`);
 
 // Deployed page: precompiled .js instead of text/babel .jsx, and no Babel CDN tag.
-let out = index.replace(MARK, `<div id="root">${html}</div>`);
+// <!--email_off--> tells Cloudflare's Email Address Obfuscation to leave the
+// address alone; otherwise it rewrites it to "[email protected]" for every
+// crawler and breaks hydration.
+let out = index.replace(MARK, `<div id="root"><!--email_off-->${html}<!--/email_off--></div>`);
 out = out.replace(/<script type="text\/babel" src="([^"]+)\.jsx"><\/script>/g, '<script src="$1.js"></script>');
 out = out.replace(/\s*<script src="https:\/\/unpkg\.com\/@babel\/standalone[^>]*><\/script>/, "");
 if (out.includes("text/babel") || out.includes("@babel/standalone")) throw new Error("Babel tags survived the rewrite");

@@ -57,6 +57,7 @@ gh run watch --repo objectiveSee/hirestarship-website
 - Repo: `objectiveSee/hirestarship-website` (public)
 - Workflow runs `npm ci && npm run build` and uploads `_site/` as the Pages artifact (the only "build" is the prerender described above)
 - Cloudflare's managed robots.txt is on: it prepends a "Content Signals" comment block to our `robots.txt`, which itself opts in (`search=yes, ai-input=yes, ai-train=yes`)
+- Cloudflare **Email Address Obfuscation** (Scrape Shield) rewrites `hello@…` to `[email protected]` + a decode script for anything without JS — the opposite of what we want. The prerender wraps `#root` in `<!--email_off-->…<!--/email_off-->` (and `404.html` does the same) so it's skipped; ideally also turn the feature off in the Cloudflare dashboard.
 - Pages source: GitHub Actions (not branch-based)
 - Custom domain `hirestarship.com` is registered via the GH Pages API (not just the `CNAME` file)
 - Cloudflare proxies (orange cloud), SSL/TLS mode **Full (strict)** — Cloudflare terminates SSL with Universal SSL; GH Pages serves valid HTTPS on the origin
