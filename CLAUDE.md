@@ -43,6 +43,8 @@ Hot reloads on file save. Open `http://localhost:8080`.
 
 **To deploy: `git push`.** That's it. Every push to `main` triggers `.github/workflows/deploy.yml`, which publishes to https://hirestarship.com in ~30 seconds.
 
+**No pull requests.** This is a one-person repo: commit on `main` and push. Don't open PRs or draft PRs, don't ask for review, don't wait for approval to merge. If work happened on a branch/worktree, fast-forward `main` to it and push (`git push origin <branch>:main`), then tell Danny to `git pull` in his main checkout.
+
 Watch the run:
 ```sh
 gh run watch --repo objectiveSee/hirestarship-website
@@ -86,6 +88,7 @@ The arrow/dot button styles (`.ssp-rp__arrow`, `.ssp-rp__dots`) are **global**, 
 **Git:**
 - Never modify the global git config. Use inline `-c user.name=... -c user.email=...` flags when committing.
 - User: `Danny Ricciotti <dan.ricciotti@gmail.com>`.
+- Straight to `main`, no PRs (see Deploying). Push = deploy.
 
 **Working style the user prefers:**
 - Section-by-section iteration with two browser windows open (one wide, one narrow) — both must look good before moving on.
