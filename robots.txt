@@ -1,0 +1,8 @@
+# hirestarship.com — everything here is public marketing content.
+# Search engines and AI crawlers are welcome to index it.
+Content-Signal: search=yes, ai-input=yes, ai-train=yes
+
+User-agent: *
+Allow: /
+
+Sitemap: https://hirestarship.com/sitemap.xml

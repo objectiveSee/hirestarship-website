@@ -156,7 +156,7 @@
   line-height: 0.98;
   letter-spacing: -0.025em;
   color: var(--nc-ink);
-  margin-top: -2px;
+  margin: -2px 0 0; /* it's an <h3>; kill the UA bottom margin */
 }
 .nc-tile__name--compact {
   font-size: 48px;

@@ -25,6 +25,8 @@ Open http://localhost:8080. Hot-reloads on save.
 
 ## Stack
 
-Plain static site — no build step. `index.html` loads React 18 + Babel from CDN; `.jsx` files transpile in the browser.
+Plain static site — no build step for local dev. `index.html` loads React 18 + Babel from CDN; `.jsx` files transpile in the browser.
+
+At deploy time CI runs `npm run build`, which copies the site to `_site/` and pre-renders the React page into `<div id="root">` (`scripts/prerender.mjs`) so crawlers that don't run JavaScript still see the content. To reproduce locally: `npm install && npm run build`, then serve `_site/`.
 
 See `CLAUDE.md` for full project conventions, file layout, and deploy internals.

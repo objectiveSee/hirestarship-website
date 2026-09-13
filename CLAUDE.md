@@ -4,10 +4,19 @@ Marketing site for Starship Consulting. Lives at https://hirestarship.com.
 
 ## Stack
 
-Plain static site. **No build step.** `index.html` loads React 18 + ReactDOM + Babel from CDN; `.jsx` files are transpiled in the browser at load time. This is intentional — keep it that way. Don't introduce Vite, bundlers, or TypeScript without an explicit reason.
+Plain static site. **No build step for local dev.** `index.html` loads React 18 + ReactDOM + Babel from CDN; `.jsx` files are transpiled in the browser at load time. This is intentional — keep it that way. Don't introduce Vite, bundlers, or TypeScript without an explicit reason.
+
+The one deploy-time step is **pre-rendering for crawlers**: CI runs `npm run build`, which rsyncs the site into `_site/` and runs `scripts/prerender.mjs` to fill `<div id="root">` with server-rendered HTML (bots without JS — Bing, LinkedIn, most AI crawlers — otherwise see an empty page). The browser then `hydrateRoot`s onto that markup; the raw dev page (empty `#root`) takes the plain `createRoot` path. Consequences:
+- First render must be deterministic (no `Math.random()`/`Date` in initial state — see the seeded feed in `namecheap-bits.jsx`). Effects are fine; they don't run on the server.
+- Top-level code in the `.jsx` files can touch `window.__resources` and `document.getElementById("root")` only; anything else browser-only goes in an effect.
+- `npm install && npm run build` reproduces the deploy locally; serve `_site/` to check it. `_site/` and `node_modules/` are gitignored.
+- React ships as the **production** builds with SRI hashes in `index.html`. Swap to the `.development.js` files (and drop the `integrity` attrs) temporarily if you need hydration warnings.
 
 ```
-index.html               entry; loads CDN React/Babel + all jsx/css/js
+index.html               entry; meta/OG/JSON-LD, loads CDN React/Babel + all jsx/css/js
+scripts/prerender.mjs    deploy-time SSR of the page into #root (see above)
+robots.txt, sitemap.xml, llms.txt, site.webmanifest, 404.html, apple-touch-icon.png
+                         crawler/bot-facing files; keep them in sync with the copy
 starship-site.jsx        main app: sections, RadioParadiseTile, TimecodeTile
 starship-site.css        main stylesheet (hero, sections, RP, TC, mobile)
 wireframe-bits.jsx       shared primitives (ImgTile, ProjectChips, etc.)
@@ -42,7 +51,8 @@ gh run watch --repo objectiveSee/hirestarship-website
 ### How it's wired (don't need to know unless something breaks)
 
 - Repo: `objectiveSee/hirestarship-website` (public)
-- Workflow uploads the repo root as a Pages artifact (no build step)
+- Workflow runs `npm ci && npm run build` and uploads `_site/` as the Pages artifact (the only "build" is the prerender described above)
+- Cloudflare's managed robots.txt is on: it prepends a "Content Signals" comment block to our `robots.txt`, which itself opts in (`search=yes, ai-input=yes, ai-train=yes`)
 - Pages source: GitHub Actions (not branch-based)
 - Custom domain `hirestarship.com` is registered via the GH Pages API (not just the `CNAME` file)
 - Cloudflare proxies (orange cloud), SSL/TLS mode **Full (strict)** — Cloudflare terminates SSL with Universal SSL; GH Pages serves valid HTTPS on the origin
@@ -52,6 +62,7 @@ Files that make deploy work — don't remove:
 - `.github/workflows/deploy.yml`
 - `CNAME` (contains `hirestarship.com`)
 - `.nojekyll`
+- `package.json` + `package-lock.json` + `scripts/prerender.mjs` (CI prerender)
 
 ## Conventions established in earlier sessions
 
@@ -65,6 +76,12 @@ Files that make deploy work — don't remove:
 - `TimecodeTile` — live 24fps timecode clock (`useTimecode` hook), screenshot carousel, App Store badge.
 
 The arrow/dot button styles (`.ssp-rp__arrow`, `.ssp-rp__dots`) are **global**, not inside a media query — both tiles use them at all sizes.
+
+**Hero height (≥1025px):** explicit `height: min(53.125vw, 1062px, 100svh - 88px)` — not `max-height` on the old `aspect-ratio` box, because a max-height on an aspect-ratio element transfers into a max-width and the hero narrows. The `- 88px` keeps the expertise band peeking in below the fold; the "Scroll ↓" cue (`.ssp-hero__scrollcue`) is hidden under 1025px where the hero is content-height.
+
+**Semantics/SEO:** section titles are real headings (h1 hero → h2 expertise/“Selected work” (sr-only)/contact → h3 per project). Keep it that way when adding tiles; add `width`/`height` to new `<img>`s.
+
+**Contact email** is `COPY.contact` in `wireframe-bits.jsx`; it appears in the hero, nav, FAB, footer, `index.html` meta/JSON-LD, `llms.txt`, and `404.html` — change all of them together.
 
 **Git:**
 - Never modify the global git config. Use inline `-c user.name=... -c user.email=...` flags when committing.

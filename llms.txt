@@ -1,0 +1,29 @@
+# Starship Studios
+
+> Small software studio in Washington, DC (working worldwide) that builds mobile apps, web apps, product design, and AI integrations. Independent since 2005. Site: https://hirestarship.com — Contact: hello@hirestarship.com
+
+Starship Studios (also referred to as Starship Consulting; the domain is hirestarship.com) is a small, senior team. Clients get the people who actually build the work. Engagements tend to be long-running.
+
+## Contact
+
+- Email: hello@hirestarship.com
+- LinkedIn: https://www.linkedin.com/in/dannyricciotti/ (Danny Ricciotti, founder)
+- Location: Washington, DC · available worldwide
+
+## Services
+
+- Mobile: React Native & Expo (native iOS and Android from one codebase), native Swift/SwiftUI. Live Activities, Dynamic Island, real-time features, audio playback.
+- Web: React, TypeScript, Next.js, Tailwind. Marketing sites and production web apps, front-end first.
+- Design: Flows, screens, brand systems — product design that ships alongside the engineering.
+- AI: Agentic workflows and AI integrations using Claude and the Claude SDKs, wired into existing products and tools.
+
+## Selected work
+
+- Radio Paradise (https://apps.apple.com/us/app/radio-paradise/id517818306): iOS and Android app for the listener-supported, DJ-curated internet radio station. React Native + TypeScript + Expo; AVFoundation on iOS, Media3/ExoPlayer on Android, Skia for slideshow and visualizations; lossless streaming.
+- Timecode+ (https://timecodeplus.com): iOS app (Swift) for time-coded note-taking on film and TV sets — live timecode generator, one-tap frame-accurate markers, on-device transcription, exports to FCPXML, EDL, Premiere XML, and ALE. App Store: https://apps.apple.com/us/app/timecode-cameraman/id590534084
+- Namecheap Auctions (https://apps.apple.com/us/app/namecheap-auctions/id6743634772): Namecheap's domain-auction app for iOS and Android. React Native + Expo; real-time bidding over WebSockets, iOS Live Activities and Dynamic Island, push notifications. Google Play: https://play.google.com/store/apps/details?id=marketplace.com.namecheap
+- BETA Technologies (NYSE: BETA) (https://apps.apple.com/us/app/beta-technologies/id1615477994): the electric-aircraft company's first mobile app for iOS and Android. React Native + Expo; real-time status across the cross-country charging network and live state-of-charge monitoring for the aircraft fleet.
+
+## Pages
+
+- [Home](https://hirestarship.com/): the single-page site — services, selected work, and contact.

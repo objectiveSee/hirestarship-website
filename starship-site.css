@@ -130,16 +130,94 @@ html { scroll-behavior: smooth; }
   transition: transform 160ms ease, background 160ms ease;
 }
 .ssp-hero__ctas .pri:hover { transform: translateY(-1px); }
+/* The email itself, as a real mailto: link. Lowercase (unlike the pill) so it
+   reads as an address people can copy, not a label. */
 .ssp-hero__ctas .sec {
   font-family: var(--ssp-mono);
-  font-size: 12px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
+  font-size: 12.5px;
+  letter-spacing: 0.06em;
   padding-bottom: 3px;
   border-bottom: 1px solid var(--ssp-paper);
   white-space: nowrap;
   cursor: pointer;
+  color: inherit;
+  text-decoration: none;
+  transition: opacity 160ms ease;
 }
+.ssp-hero__ctas .sec:hover { opacity: 0.75; }
+
+/* On wide windows the 16:8.5 hero can be taller than the viewport, which
+   hides the fact that there's a page below it. Cap it so the expertise band
+   always peeks in at the bottom. (Tablet/mobile use aspect-ratio:auto and
+   size to content, so no cap there.) */
+@media (min-width: 1025px) {
+  /* Explicit height rather than max-height: on an aspect-ratio box a
+     max-height transfers into a max-width and the hero would narrow. The
+     53.125vw term is the old 16 / 8.5 ratio; 1062px is that ratio at the
+     2000px page max-width. */
+  .ssp-hero {
+    aspect-ratio: auto;
+    height: min(53.125vw, 1062px, calc(100vh - 88px));
+    height: min(53.125vw, 1062px, calc(100svh - 88px));
+  }
+}
+
+/* "Scroll" cue, bottom-center of the hero. Links to #work; fades once the
+   reader has scrolled. Hidden below 1025px where the hero is content-height
+   and the next band is already visible. */
+.ssp-hero__scrollcue {
+  position: absolute;
+  left: 50%;
+  bottom: 24px;
+  z-index: 2;
+  transform: translateX(-50%);
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--ssp-mono);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ssp-paper);
+  opacity: 0.7;
+  text-decoration: none;
+  transition: opacity 300ms ease;
+}
+.ssp-hero__scrollcue svg {
+  width: 16px; height: 16px;
+  animation: ssp-cue-bob 1.8s ease-in-out infinite;
+}
+.ssp-hero__scrollcue:hover { opacity: 1; }
+.ssp-hero__scrollcue.is-hidden { opacity: 0; pointer-events: none; }
+@keyframes ssp-cue-bob {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(5px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ssp-hero__scrollcue svg { animation: none; }
+}
+@media (max-width: 1024px) {
+  .ssp-hero__scrollcue { display: none; }
+}
+
+/* Visually-hidden but available to screen readers and crawlers. */
+.ssp-sr-only {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Titles that became real headings for semantics — keep their box exactly
+   as it was when they were <div>s. */
+.ssp-expertise__big,
+.ssp-expertise__sub,
+.ssp-tc__name,
+.ssp-rp__name { margin: 0; }
 
 /* ============================================================
    SECTION HEAD — final-style (Inter 800), replaces the
@@ -895,9 +973,9 @@ html { scroll-behavior: smooth; }
     padding: 10px 18px;
     font-size: 11px;
   }
-  /* Secondary "say hi" inline CTA is redundant on mobile —
-     the nav already has the Say hi pill. Hide it. */
-  .ssp-hero__ctas .sec { display: none; }
+  /* Keep the email address visible on mobile too — it wraps under the
+     "See the work" pill. */
+  .ssp-hero__ctas .sec { font-size: 12px; }
 
   .ssp-footer { padding: 56px 20px; }
   .ssp-postcard { padding: 44px 24px 40px; gap: 16px; }

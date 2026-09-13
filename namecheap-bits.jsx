@@ -22,16 +22,26 @@ const DOMAINS = [
 ];
 
 let __idSeq = 0;
-const randInt = (a, b) => Math.floor(Math.random() * (b - a + 1)) + a;
-const randomDomain = () => DOMAINS[Math.floor(Math.random() * DOMAINS.length)];
+// Tiny seeded PRNG (mulberry32). The initial feed is generated from a fixed
+// seed so the pre-rendered HTML (scripts/prerender.mjs) matches the first
+// client render and hydrates without a mismatch; live ticks use Math.random.
+const seeded = (seed) => () => {
+  seed = (seed + 0x6D2B79F5) | 0;
+  let t = seed;
+  t = Math.imul(t ^ (t >>> 15), t | 1);
+  t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+  return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+};
+const randInt = (a, b, rnd = Math.random) => Math.floor(rnd() * (b - a + 1)) + a;
+const randomDomain = (rnd = Math.random) => DOMAINS[Math.floor(rnd() * DOMAINS.length)];
 
-const makeAuction = () => {
-  const h = randInt(0, 23), m = randInt(0, 59), s = randInt(0, 59);
+const makeAuction = (rnd = Math.random) => {
+  const h = randInt(0, 23, rnd), m = randInt(0, 59, rnd), s = randInt(0, 59, rnd);
   return {
     id: ++__idSeq,
-    domain: randomDomain(),
-    bid: randInt(2, 220) * 50,
-    bidders: randInt(2, 28),
+    domain: randomDomain(rnd),
+    bid: randInt(2, 220, rnd) * 50,
+    bidders: randInt(2, 28, rnd),
     time: `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`,
     flash: null,
     delta: null
@@ -39,9 +49,10 @@ const makeAuction = () => {
 };
 
 const AuctionFeed = ({ count = 8, interval = 1100, density = "comfortable", style }) => {
-  const [items, setItems] = useState(() =>
-    Array.from({ length: count }, () => makeAuction())
-  );
+  const [items, setItems] = useState(() => {
+    const rnd = seeded(0x5747 + count);
+    return Array.from({ length: count }, () => makeAuction(rnd));
+  });
 
   useEffect(() => {
     let t;
@@ -94,7 +105,7 @@ const AuctionFeed = ({ count = 8, interval = 1100, density = "comfortable", styl
 };
 
 /* ─── Store buttons — use the official Apple / Google badge images. ──── */
-const StoreBadge = ({ platform, href, label, src }) => (
+const StoreBadge = ({ platform, href, label, src, width, height }) => (
   <a
     href={href}
     className={`nc-storebadge nc-storebadge--${platform}`}
@@ -102,7 +113,7 @@ const StoreBadge = ({ platform, href, label, src }) => (
     rel="noopener noreferrer"
     aria-label={label}
   >
-    <img src={src} alt={label} />
+    <img src={src} alt={label} width={width} height={height} />
   </a>
 );
 
@@ -113,12 +124,16 @@ const StoreButtonRow = () => (
       href="https://apps.apple.com/us/app/namecheap-auctions/id6743634772"
       label="Download on the App Store"
       src="assets/badges/appstore-white.svg"
+      width={120}
+      height={40}
     />
     <StoreBadge
       platform="android"
       href="https://play.google.com/store/apps/details?id=marketplace.com.namecheap"
       label="Get it on Google Play"
       src="assets/badges/googleplay-trimmed.png"
+      width={564}
+      height={168}
     />
   </div>
 );
@@ -138,6 +153,10 @@ const NamecheapMark = ({ height = 34 }) => (
     src={_A('ncWordmark', 'assets/namecheap/wordmark.svg')}
     alt="Namecheap"
     className="nc-wordmark"
+    width={258}
+    height={47}
+    loading="lazy"
+    decoding="async"
     style={{ height, width: "auto", display: "block", alignSelf: "flex-start" }}
   />
 );
@@ -182,7 +201,7 @@ const NCScreenPager = ({ srcs = NC_SCREENS, interval = 8000, className = "" }) =
             style={{ width: `${100 / n}%` }}
             aria-hidden={idx !== i}
           >
-            <img src={src} alt="" draggable="false" />
+            <img src={src} alt="" draggable="false" width={230} height={499} decoding="async" />
           </div>
         ))}
       </div>
@@ -202,9 +221,9 @@ const NCScreenPager = ({ srcs = NC_SCREENS, interval = 8000, className = "" }) =
 const NCScopeCopy = ({ compact = false }) => (
   <>
     <NamecheapMark height={compact ? 26 : 34} />
-    <div className={`nc-tile__name${compact ? " nc-tile__name--compact" : ""}`}>
+    <h3 className={`nc-tile__name${compact ? " nc-tile__name--compact" : ""}`}>
       Namecheap<br/>Auctions
-    </div>
+    </h3>
     <div className="nc-tile__kicker">React Native · iOS · Android</div>
     <div className="nc-tile__desc">
       Namecheap's mobile app for domain auctions on iOS and Android — built in React Native + Expo.

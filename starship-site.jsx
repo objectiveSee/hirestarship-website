@@ -21,10 +21,17 @@ const RADIO_PARADISE = CLIENTS.find(c => c.name === "Radio Paradise");
 /* ───── Hero — starfield shader, floating nav, big title ─────────────────── */
 function Hero() {
   const canvasRef = useRef(null);
+  // Scroll cue at the bottom of the hero — fades out once the reader has
+  // actually scrolled, so it never nags.
+  const [scrolled, setScrolled] = useState(false);
   useEffect(() => {
     if (canvasRef.current && typeof window.mountStarfield === "function") {
       window.mountStarfield(canvasRef.current);
     }
+    const onScroll = () => setScrolled(window.scrollY > 40);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
   return (
     <header className="ssp-hero" data-screen-label="Hero">
@@ -47,10 +54,16 @@ function Hero() {
           <p className="ssp-hero__intro">Mobile, web, and AI integrations, built right.</p>
           <div className="ssp-hero__ctas">
             <a className="pri" href="#work">See the work</a>
-            <span className="sec">{COPY.contact}</span>
+            <a className="sec" href={`mailto:${COPY.contact}`}>{COPY.contact}</a>
           </div>
         </div>
       </div>
+      <a className={`ssp-hero__scrollcue${scrolled ? " is-hidden" : ""}`} href="#work" aria-label="Scroll down to the work">
+        <span>Scroll</span>
+        <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+          <path d="M3 6l5 5 5-5" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      </a>
     </header>
   );
 }
@@ -59,23 +72,23 @@ function Hero() {
    three areas (Mobile / Web / Design). Matches Hero Options.html B. */
 function Expertise() {
   return (
-    <section className="ssp-expertise" data-screen-label="Expertise">
+    <section className="ssp-expertise" data-screen-label="Expertise" aria-label="What we do">
       <div className="ssp-expertise__grid">
         <div className="ssp-expertise__col">
-          <div className="ssp-expertise__big">Mobile</div>
-          <div className="ssp-expertise__sub">React Native &amp; Expo. Native iOS and Android from one codebase. Live Activities, real-time, audio.</div>
+          <h2 className="ssp-expertise__big">Mobile</h2>
+          <p className="ssp-expertise__sub">React Native &amp; Expo. Native iOS and Android from one codebase. Live Activities, real-time, audio.</p>
         </div>
         <div className="ssp-expertise__col">
-          <div className="ssp-expertise__big">Web</div>
-          <div className="ssp-expertise__sub">React, TypeScript, Tailwind. Marketing sites and production web apps, front-end first.</div>
+          <h2 className="ssp-expertise__big">Web</h2>
+          <p className="ssp-expertise__sub">React, TypeScript, Tailwind. Marketing sites and production web apps, front-end first.</p>
         </div>
         <div className="ssp-expertise__col">
-          <div className="ssp-expertise__big">Design</div>
-          <div className="ssp-expertise__sub">Flows, screens, brand systems. Product design that ships alongside the engineering, not before it.</div>
+          <h2 className="ssp-expertise__big">Design</h2>
+          <p className="ssp-expertise__sub">Flows, screens, brand systems. Product design that ships alongside the engineering, not before it.</p>
         </div>
         <div className="ssp-expertise__col">
-          <div className="ssp-expertise__big">AI</div>
-          <div className="ssp-expertise__sub">Agentic workflows and AI integrations. Claude and the SDKs around it, wired into existing products and the tools teams already use.</div>
+          <h2 className="ssp-expertise__big">AI</h2>
+          <p className="ssp-expertise__sub">Agentic workflows and AI integrations. Claude and the SDKs around it, wired into existing products and the tools teams already use.</p>
         </div>
       </div>
     </section>
@@ -130,11 +143,13 @@ function RadioParadiseTile() {
         <div className="ssp-rp__left">
           <div className="ssp-rp__live">On Air</div>
           <div className="ssp-rp__body">
-            <img className="ssp-rp__wordmark" src={_A('rpLogo', 'assets/radio-paradise-logo.png')} alt="Radio Paradise — Human Curated Radio" />
+            <h3 className="ssp-rp__name">
+              <img className="ssp-rp__wordmark" src={_A('rpLogo', 'assets/radio-paradise-logo.png')} alt="Radio Paradise — Human Curated Radio" width={1000} height={1000} loading="lazy" decoding="async" />
+            </h3>
             <div className="ssp-rp__sub">Radio Paradise's mobile app for ad-free, DJ-curated internet radio on iOS and Android — built in React Native + TypeScript with Expo. AVFoundation drives iOS playback, Media3/ExoPlayer handles Android, and Skia powers the cross-platform slideshow and visualizations.</div>
             <div className="ssp-rp__stores">
               <a className="ssp-rp__badge" href="https://apps.apple.com/us/app/radio-paradise/id517818306" target="_blank" rel="noopener" aria-label="Download on the App Store">
-                <img src={APPSTORE_BADGE} alt="Download on the App Store" />
+                <img src={APPSTORE_BADGE} alt="Download on the App Store" width={120} height={40} />
               </a>
             </div>
             <ProjectChips client={RADIO_PARADISE} variant="inline" />
@@ -142,7 +157,7 @@ function RadioParadiseTile() {
         </div>
         <div className="ssp-rp__shots" data-active-shot={activeShot}>
           {RP_SHOTS.map(s => (
-            <div className="ssp-rp-phone" key={s.id}><img src={_A(s.id, s.fallback)} alt={s.alt} /></div>
+            <div className="ssp-rp-phone" key={s.id}><img src={_A(s.id, s.fallback)} alt={s.alt} width={1170} height={2532} decoding="async" /></div>
           ))}
         </div>
         <div className="ssp-rp__shots-nav" aria-label="Screenshot carousel">
@@ -194,10 +209,10 @@ function useTimecode() {
 
 /* ───── Timecode+ — bespoke tile with live clock + screenshot carousel ──── */
 const TC_SHOTS = [
-  { id: "tcMarkerList", fallback: "assets/timecode/marker-list.png", alt: "Timecode+ — marker list" },
-  { id: "tcExport",     fallback: "assets/timecode/export.png",      alt: "Timecode+ — export to NLEs" },
-  { id: "tcNewNote",    fallback: "assets/timecode/new-note.png",    alt: "Timecode+ — new note" },
-  { id: "tcDictation",  fallback: "assets/timecode/dictation.png",   alt: "Timecode+ — live dictation while recording" },
+  { id: "tcMarkerList", fallback: "assets/timecode/marker-list.png", alt: "Timecode+ — marker list",                        w: 1206, h: 2622 },
+  { id: "tcExport",     fallback: "assets/timecode/export.png",      alt: "Timecode+ — export to NLEs",                     w: 1206, h: 2622 },
+  { id: "tcNewNote",    fallback: "assets/timecode/new-note.png",    alt: "Timecode+ — new note",                           w: 1206, h: 2622 },
+  { id: "tcDictation",  fallback: "assets/timecode/dictation.png",   alt: "Timecode+ — live dictation while recording",     w: 1170, h: 2532 },
 ];
 
 function TimecodeTile() {
@@ -212,8 +227,8 @@ function TimecodeTile() {
       <div className="ssp-tc-tile__content">
         <div className="ssp-tc__left">
           <a className="ssp-tc__head" href="https://timecodeplus.com" target="_blank" rel="noopener" aria-label="Visit timecodeplus.com">
-            <img className="ssp-tc__icon" src={_A("tcAppIcon", "assets/timecode/app-icon.png")} alt="" />
-            <div className="ssp-tc__name">Timecode+</div>
+            <img className="ssp-tc__icon" src={_A("tcAppIcon", "assets/timecode/app-icon.png")} alt="" width={56} height={56} loading="lazy" decoding="async" />
+            <h3 className="ssp-tc__name">Timecode+</h3>
           </a>
           <div className="ssp-tc__kicker">iOS · Web · Swift</div>
           <div className="ssp-tc__clock" aria-label={`Live timecode ${tc.h}:${tc.m}:${tc.s}:${tc.f}`}>
@@ -228,7 +243,7 @@ function TimecodeTile() {
           <div className="ssp-tc__sub">Timecode+ is time-coded note-taking for film and TV — an iOS app built in Swift. A live timecode generator, one-tap markers pinned to frame, on-device transcription, and exports to FCPXML, EDL, Premiere XML, and ALE.</div>
           <div className="ssp-tc__stores">
             <a className="ssp-rp__badge" href="https://apps.apple.com/us/app/timecode-cameraman/id590534084" target="_blank" rel="noopener" aria-label="Download Timecode+ on the App Store">
-              <img src={APPSTORE_BADGE} alt="Download on the App Store" />
+              <img src={APPSTORE_BADGE} alt="Download on the App Store" width={120} height={40} />
             </a>
             <a className="ssp-tc__site-link" href="https://timecodeplus.com" target="_blank" rel="noopener">timecodeplus.com →</a>
           </div>
@@ -238,7 +253,7 @@ function TimecodeTile() {
         <div className="ssp-tc__right">
           <div className="ssp-tc__shots" data-active-shot={activeShot}>
             {TC_SHOTS.map(s => (
-              <div className="ssp-rp-phone" key={s.id}><img src={_A(s.id, s.fallback)} alt={s.alt} /></div>
+              <div className="ssp-rp-phone" key={s.id}><img src={_A(s.id, s.fallback)} alt={s.alt} width={s.w} height={s.h} decoding="async" /></div>
             ))}
           </div>
           <div className="ssp-tc__shots-nav" aria-label="Screenshot carousel">
@@ -271,9 +286,20 @@ function TimecodeTile() {
 const BETA_TECH = ["React Native", "Expo", "WebSockets"];
 
 function BetaTile() {
+  const videoRef = useRef(null);
+  // When the page is pre-rendered, React's server markup drops the `muted`
+  // attribute and hydration doesn't reapply it, so autoplay can stall. Set it
+  // on the live element and nudge playback once mounted.
+  useEffect(() => {
+    const v = videoRef.current;
+    if (!v) return;
+    v.muted = true;
+    v.play().catch(() => {});
+  }, []);
   return (
     <div className="ssp-beta-tile" data-tone="cinematic">
       <video
+        ref={videoRef}
         className="ssp-beta-tile__video"
         src="assets/beta/hero-loop.mp4"
         autoPlay
@@ -285,7 +311,7 @@ function BetaTile() {
       />
       <div className="ssp-beta-tile__overlay" aria-hidden="true" />
       <div className="ssp-beta-tile__content">
-        <div className="ssp-beta-tile__name">BETA<br/>Technologies</div>
+        <h3 className="ssp-beta-tile__name">BETA<br/>Technologies</h3>
         <div className="ssp-beta-tile__kicker">React Native · iOS · Android</div>
         <div className="ssp-beta-tile__desc">
           BETA Technologies <span className="ssp-beta-tile__ticker">(NYSE: BETA)</span> shipped
@@ -304,7 +330,7 @@ function BetaTile() {
             rel="noopener noreferrer"
             aria-label="Download BETA Technologies on the App Store"
           >
-            <img src="assets/badges/appstore-white.svg" alt="Download on the App Store" />
+            <img src="assets/badges/appstore-white.svg" alt="Download on the App Store" width={120} height={40} />
           </a>
           <a
             className="ssp-beta-tile__badge ssp-beta-tile__badge--play"
@@ -313,7 +339,7 @@ function BetaTile() {
             rel="noopener noreferrer"
             aria-label="Get BETA Technologies on Google Play"
           >
-            <img src="assets/badges/googleplay-trimmed.png" alt="Get it on Google Play" />
+            <img src="assets/badges/googleplay-trimmed.png" alt="Get it on Google Play" width={564} height={168} />
           </a>
         </div>
       </div>
@@ -428,9 +454,11 @@ function StarshipSite() {
   return (
     <div className="ssp-page" data-screen-label="Starship Studios">
       <Hero />
+      <main>
       <Expertise />
 
-      <div id="work">
+      <section id="work" aria-labelledby="work-title">
+        <h2 id="work-title" className="ssp-sr-only">Selected work</h2>
         <div className="ssp-projects">
           {/* 1 · Radio Paradise — bespoke tile; chips rendered inline
               inside the left column (handled in RadioParadiseTile). */}
@@ -456,7 +484,8 @@ function StarshipSite() {
             <BetaTile />
           </Project>
         </div>
-      </div>
+      </section>
+      </main>
 
       <footer className="ssp-footer" id="contact" data-screen-label="Footer">
         <div className="ssp-postcard">
@@ -481,6 +510,7 @@ function StarshipSite() {
         </div>
         <div className="ssp-postcard__base">
           <span>© 2026 <b>{COPY.brand}</b></span>
+          <a className="ssp-postcard__social" href={`mailto:${COPY.contact}`}>{COPY.contact}</a>
           <span>Washington, DC · Worldwide</span>
         </div>
       </footer>
@@ -490,5 +520,12 @@ function StarshipSite() {
   );
 }
 
-const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(<StarshipSite />);
+// Deployed index.html is pre-rendered (scripts/prerender.mjs fills #root at
+// deploy time), so hydrate onto that markup. The raw dev page has an empty
+// #root and takes the plain render path.
+const container = document.getElementById("root");
+if (container.hasChildNodes()) {
+  ReactDOM.hydrateRoot(container, <StarshipSite />);
+} else {
+  ReactDOM.createRoot(container).render(<StarshipSite />);
+}

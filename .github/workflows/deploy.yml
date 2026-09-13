@@ -22,9 +22,23 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      # Copies the site into _site/ and fills <div id="root"> with pre-rendered
+      # HTML so crawlers that don't run JS still see the page. Everything else
+      # ships byte-for-byte as committed.
+      - name: Build _site (copy + prerender)
+        run: npm run build
+      - name: Sanity-check prerendered output
+        run: |
+          grep -q 'hello@hirestarship.com' _site/index.html
+          test -f _site/robots.txt && test -f _site/sitemap.xml && test -f _site/CNAME && test -f _site/.nojekyll
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: .
+          path: _site
       - id: deployment
         uses: actions/deploy-pages@v4
