@@ -116,9 +116,10 @@
 <body>
   <!-- At deploy time scripts/prerender.mjs fills this div with the rendered
        page so crawlers without JS see real content; React hydrates on top.
-       It wraps the markup in <!--email_off--> so Cloudflare's email
-       obfuscation leaves hello@ readable (turn that feature off in Cloudflare
-       → Scrape Shield too; it hides the address from bots). -->
+       It also wraps the markup in Cloudflare's email_off comment markers so
+       Email Address Obfuscation leaves hello@ readable. (Never put a literal
+       comment marker inside this comment: it closes it early and the rest
+       renders as page text.) -->
   <div id="root"></div>
 
   <!-- WebGL shaders for the hero + Radio Paradise tile -->
