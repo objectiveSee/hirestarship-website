@@ -74,5 +74,14 @@ out = out.replace(/<script type="text\/babel" src="([^"]+)\.jsx"><\/script>/g, '
 out = out.replace(/\s*<script src="https:\/\/unpkg\.com\/@babel\/standalone[^>]*><\/script>/, "");
 if (out.includes("text/babel") || out.includes("@babel/standalone")) throw new Error("Babel tags survived the rewrite");
 
+// Guard against a comment closing early (e.g. a literal marker inside a
+// comment) and leaking text onto the page: nothing but comments/whitespace
+// may sit between <body> and #root, and comment open/close counts must match.
+const body = out.slice(out.indexOf("<body>") + 6, out.indexOf('<div id="root">'));
+const stray = body.replace(/<!--[\s\S]*?-->/g, "").trim();
+if (stray) throw new Error(`stray text before #root would render on the page: ${JSON.stringify(stray.slice(0, 120))}`);
+const opens = (out.match(/<!--/g) || []).length, closes = (out.match(/-->/g) || []).length;
+if (opens !== closes) throw new Error(`HTML comment open/close mismatch (${opens} vs ${closes})`);
+
 fs.writeFileSync(OUT, out);
 console.log(`prerendered ${(html.length / 1024).toFixed(1)} KB of markup + compiled ${JSX_FILES.length} scripts → ${path.relative(ROOT, path.dirname(OUT))}/`);
